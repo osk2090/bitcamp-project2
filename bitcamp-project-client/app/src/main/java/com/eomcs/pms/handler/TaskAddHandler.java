@@ -1,15 +1,14 @@
 package com.eomcs.pms.handler;
 
+import com.eomcs.driver.Statement;
 import com.eomcs.pms.domain.Task;
 import com.eomcs.util.Prompt;
-
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 
 public class TaskAddHandler implements Command {
 
   @Override
-  public void service(DataInputStream in, DataOutputStream out) throws Exception {
+  public void service(Statement stmt) throws Exception {
+
     System.out.println("[작업 등록]");
 
     Task t = new Task();
@@ -21,19 +20,8 @@ public class TaskAddHandler implements Command {
       System.out.println("작업 등록을 취소하였습니다.");
       return;
     }
+    stmt.excuteUpdate("task/insert", String.format("%s,%s,%s,%s", t.getContent(), t.getDeadline(), t.getStatus(), t.getOwner()));
 
-    out.writeUTF("task/insert");
-    out.writeInt(1);
-    out.writeUTF(String.format("%s,%s,%s,%s", t.getContent(), t.getDeadline(), t.getStatus(), t.getOwner()));
-    out.flush();
-
-    String status = in.readUTF();
-    in.readInt();
-
-    if (status.equals("error")) {
-      System.out.println(in.readUTF());
-      return;
-    }
     System.out.println("작업을 등록했습니다.");
   }
 }

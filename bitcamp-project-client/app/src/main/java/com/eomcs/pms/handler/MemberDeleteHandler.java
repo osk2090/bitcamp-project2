@@ -1,55 +1,28 @@
 package com.eomcs.pms.handler;
 
+import com.eomcs.driver.Statement;
 import com.eomcs.util.Prompt;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-
 public class MemberDeleteHandler implements Command {
-  @Override
-  public void service(DataInputStream in, DataOutputStream out) throws Exception {
-      System.out.println("[회원 삭제]");
+    @Override
+    public void service(Statement stmt) throws Exception {
 
-      int no = Prompt.inputInt("번호? ");
+        System.out.println("[회원 삭제]");
 
-      //서버에 해당 번호의 게시글이 있는지 조회한다
-      out.writeUTF("member/select");
-      out.writeInt(1);
-      out.writeUTF(Integer.toString(no));
-      out.flush();
+        int no = Prompt.inputInt("번호? ");
 
-      //서버의 응답을 읽는다
-      String status = in.readUTF();
-      in.readInt();
-      String data = in.readUTF();
+        stmt.excuteQuery("member/select", Integer.toString(no));
 
-      if (status.equals("error")) {
-        System.out.println(data);
-        return;
-      }
+        String input = Prompt.inputString("정말 삭제하시겠습니까?(y/N) ");
+        if (!input.equalsIgnoreCase("Y")) {
+            System.out.println("회원을 삭제를 취소하였습니다.");
+            return;
+        }
 
-      String input = Prompt.inputString("정말 삭제하시겠습니까?(y/N) ");
-      if (!input.equalsIgnoreCase("Y")) {
-        System.out.println("회원을 삭제를 취소하였습니다.");
-        return;
-      }
+        stmt.excuteUpdate("member/delete", Integer.toString(no));
 
-      //서버에 데이터 삭제를 요청한다
-      out.writeUTF("member/delete");
-      out.writeInt(1);
-      out.writeUTF(Integer.toString(no));
-      out.flush();
-
-      //서버의 응답을 읽는다
-      status = in.readUTF();
-      in.readInt();
-
-      if (status.equals("error")) {
-        System.out.println(in.readUTF());
-        return;
-      }
-      System.out.println("회원을 삭제하였습니다.");
-  }
+        System.out.println("회원을 삭제하였습니다.");
+    }
 }
 
 

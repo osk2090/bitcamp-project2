@@ -1,34 +1,25 @@
 package com.eomcs.pms.handler;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import com.eomcs.driver.Statement;
+
+import java.util.Iterator;
 
 public class MemberListHandler implements Command {
-  @Override
-  public void service(DataInputStream in, DataOutputStream out) throws Exception {
-      System.out.println("[회원 목록]");
+    @Override
+    public void service(Statement stmt) throws Exception {
 
-      //서버에 데이터 목록을 달라고 요청한다
-      out.writeUTF("member/selectall");
-      out.writeInt(0);
-      out.flush();
+        System.out.println("[회원 목록]");
 
-      //서버의 응답 데이터를 읽는다
-      String status = in.readUTF();
-      int length = in.readInt();
+        Iterator<String> results = stmt.excuteQuery("member/selectall");
 
-      if (status.equals("error")) {
-        System.out.println(in.readUTF());
-        return;
-      }
 
-      for (int i = 0; i < length; i++) {
-        String[] fields = in.readUTF().split(",");
+        while (results.hasNext()) {
+            String[] fields = results.next().split(",");
 
-        System.out.printf("%s, %s, %s, %s, %s\n",
-                fields[0], fields[1], fields[2], fields[3], fields[4]);
-      }
-  }
+            System.out.printf("%s, %s, %s, %s, %s\n",
+                    fields[0], fields[1], fields[2], fields[3], fields[4]);
+        }
+    }
 }
 
 
