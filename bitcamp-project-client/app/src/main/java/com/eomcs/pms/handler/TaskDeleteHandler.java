@@ -7,8 +7,14 @@ import java.util.Iterator;
 
 public class TaskDeleteHandler implements Command {
 
+    Statement stmt;
+
+    public TaskDeleteHandler(Statement stmt) {
+        this.stmt = stmt;
+    }
+
     @Override
-    public void service(Statement stmt) throws Exception {
+    public void service() throws Exception {
 
         System.out.println("[작업 삭제]");
 

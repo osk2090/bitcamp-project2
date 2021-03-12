@@ -4,8 +4,14 @@ import com.eomcs.driver.Statement;
 import com.eomcs.util.Prompt;
 
 public class MemberUpdateHandler implements Command {
+    Statement stmt;
+
+    public MemberUpdateHandler(Statement stmt) {
+        this.stmt = stmt;
+    }
+
     @Override
-    public void service(Statement stmt) throws Exception {
+    public void service() throws Exception {
 
         System.out.println("[회원 변경]");
 

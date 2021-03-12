@@ -5,9 +5,14 @@ import com.eomcs.pms.domain.Task;
 import com.eomcs.util.Prompt;
 
 public class TaskAddHandler implements Command {
+  Statement stmt;
+
+  public TaskAddHandler(Statement stmt) {
+    this.stmt = stmt;
+  }
 
   @Override
-  public void service(Statement stmt) throws Exception {
+  public void service() throws Exception {
 
     System.out.println("[작업 등록]");
 

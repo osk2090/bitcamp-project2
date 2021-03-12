@@ -6,9 +6,14 @@ import com.eomcs.pms.domain.Task;
 import java.util.Iterator;
 
 public class TaskListHandler implements Command {
+    Statement stmt;
+
+    public TaskListHandler(Statement stmt) {
+        this.stmt = stmt;
+    }
 
     @Override
-    public void service(Statement stmt) throws Exception {
+    public void service() throws Exception {
         System.out.println("[작업 목록]");
 
         Iterator<String> results = stmt.excuteQuery("task/selectall");

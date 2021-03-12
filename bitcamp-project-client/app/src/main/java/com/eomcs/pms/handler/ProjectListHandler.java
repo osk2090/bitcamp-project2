@@ -5,8 +5,14 @@ import com.eomcs.driver.Statement;
 import java.util.Iterator;
 
 public class ProjectListHandler implements Command {
+  Statement stmt;
+
+  public ProjectListHandler(Statement stmt) {
+    this.stmt = stmt;
+  }
+
   @Override
-  public void service(Statement stmt) throws Exception {
+  public void service() throws Exception {
 
     System.out.println("[프로젝트 목록]");
 

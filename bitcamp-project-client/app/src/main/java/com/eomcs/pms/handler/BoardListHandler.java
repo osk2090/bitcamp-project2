@@ -5,9 +5,14 @@ import com.eomcs.driver.Statement;
 import java.util.Iterator;
 
 public class BoardListHandler implements Command {
+    Statement stmt;
 
-  @Override
-  public void service(Statement stmt) throws Exception {
+    public BoardListHandler(Statement stmt) {
+        this.stmt = stmt;
+    }
+
+    @Override
+  public void service() throws Exception {
       System.out.println("[게시글 목록]");
 
       Iterator<String> results = stmt.excuteQuery("board/selectall");

@@ -5,8 +5,13 @@ import com.eomcs.util.Prompt;
 
 public class BoardDeleteHandler implements Command {
 
-    @Override
-    public void service(Statement stmt) throws Exception {
+    Statement stmt;
+
+    public BoardDeleteHandler(Statement stmt) {
+        this.stmt = stmt;
+    }
+
+    public void service() throws Exception {
 
         System.out.println("[게시글 삭제]");
 
