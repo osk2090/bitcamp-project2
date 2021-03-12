@@ -1,40 +1,29 @@
 package com.eomcs.pms.handler;
 
+import com.eomcs.driver.Statement;
 import com.eomcs.util.Prompt;
-
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 
 public class MemberValidatorHandler {
 
-  public static String inputMember(String promptTitle, DataInputStream in, DataOutputStream out) throws Exception {
+  public static String inputMember(String promptTitle, Statement stmt) throws Exception {
+
     while (true) {
       String name = Prompt.inputString(promptTitle);
       if (name.length() == 0) {
         return null;
       }
-
-      out.writeUTF("member/selectByName");
-      out.writeInt(1);
-      out.writeUTF(name);
-      out.flush();
-
-      String status = in.readUTF();
-      in.readInt();
-      String data = in.readUTF();
-
-      if (status.equals("success")) {
-        String[] fields = data.split(",");
-        return fields[1];
+      try {
+        return stmt.excuteQuery("member/selectByName", name).next().split(",")[1];
+      } catch (Exception e) {
+        System.out.println("등록된 회원이 아닙니다.");
       }
-      System.out.println("등록된 회원이 아닙니다.");
     }
   }
 
-  public static String inputMembers(String promptTitle, DataInputStream in, DataOutputStream out) throws Exception {
+  public static String inputMembers(String promptTitle, Statement stmt) throws Exception {
     String members = "";
     while (true) {
-      String name = inputMember(promptTitle, in, out);
+      String name = inputMember(promptTitle, stmt);
       if (name == null) {
         return members;
       } else {

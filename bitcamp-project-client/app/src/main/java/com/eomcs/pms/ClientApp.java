@@ -35,27 +35,27 @@ public class ClientApp {
 
     commandMap.put("/board/add", new BoardAddHandler());
     commandMap.put("/board/list", new BoardListHandler());
-//    commandMap.put("/board/detail", new BoardDetailHandler());
-//    commandMap.put("/board/update", new BoardUpdateHandler());
-//    commandMap.put("/board/delete", new BoardDeleteHandler());
-//
-//    commandMap.put("/member/add", new MemberAddHandler());
-//    commandMap.put("/member/list", new MemberListHandler());
-//    commandMap.put("/member/detail", new MemberDetailHandler());
-//    commandMap.put("/member/update", new MemberUpdateHandler());
-//    commandMap.put("/member/delete", new MemberDeleteHandler());
-//
-//    commandMap.put("/task/add", new TaskAddHandler());
-//    commandMap.put("/task/list", new TaskListHandler());
-//    commandMap.put("/task/detail", new TaskDetailHandler());
-//    commandMap.put("/task/update", new TaskUpdateHandler());
-//    commandMap.put("/task/delete", new TaskDeleteHandler());
-//
-//    commandMap.put("/project/add", new ProjectAddHandler());
-//    commandMap.put("/project/list", new ProjectListHandler());
-//    commandMap.put("/project/detail", new ProjectDetailHandler());
-//    commandMap.put("/project/update", new ProjectUpdateHandler());
-//    commandMap.put("/project/delete", new ProjectDeleteHandler());
+    commandMap.put("/board/detail", new BoardDetailHandler());
+    commandMap.put("/board/update", new BoardUpdateHandler());
+    commandMap.put("/board/delete", new BoardDeleteHandler());
+
+    commandMap.put("/member/add", new MemberAddHandler());
+    commandMap.put("/member/list", new MemberListHandler());
+    commandMap.put("/member/detail", new MemberDetailHandler());
+    commandMap.put("/member/update", new MemberUpdateHandler());
+    commandMap.put("/member/delete", new MemberDeleteHandler());
+
+    commandMap.put("/task/add", new TaskAddHandler());
+    commandMap.put("/task/list", new TaskListHandler());
+    commandMap.put("/task/detail", new TaskDetailHandler());
+    commandMap.put("/task/update", new TaskUpdateHandler());
+    commandMap.put("/task/delete", new TaskDeleteHandler());
+
+    commandMap.put("/project/add", new ProjectAddHandler());
+    commandMap.put("/project/list", new ProjectListHandler());
+    commandMap.put("/project/detail", new ProjectDetailHandler());
+    commandMap.put("/project/update", new ProjectUpdateHandler());
+    commandMap.put("/project/delete", new ProjectDeleteHandler());
 
     try ( //서버와 통신하는 것을 대행해줄 객체를 준비한다
           Statement stmt = new Statement(serverAddress, port)) {

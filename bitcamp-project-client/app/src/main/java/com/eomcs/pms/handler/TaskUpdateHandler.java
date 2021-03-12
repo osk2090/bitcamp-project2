@@ -4,8 +4,6 @@ import com.eomcs.driver.Statement;
 import com.eomcs.pms.domain.Task;
 import com.eomcs.util.Prompt;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.sql.Date;
 
 public class TaskUpdateHandler implements Command {
@@ -22,7 +20,8 @@ public class TaskUpdateHandler implements Command {
         Date deadline = Prompt.inputDate(String.format("마감일(%s)? ", fields[2]));
         int statusNo = Prompt.inputInt(String.format(
                 "상태(%s)?\n0: 신규\n1: 진행중\n2: 완료\n> ", Task.getStatusLabel(Integer.parseInt(fields[3]))));
-        String owner = MemberValidatorHandler.inputMember(String.format("담당자(%s)?(취소: 빈 문자열) ", fields[4]), stmt.excuteQuery(""));
+        String owner = MemberValidatorHandler.inputMember(String.format("담당자(%s)?(취소: 빈 문자열) ", fields[4]), stmt);
+
         if (owner == null) {
             System.out.println("작업 변경을 취소합니다.");
             return;
