@@ -6,8 +6,10 @@ import com.eomcs.util.Prompt;
 
 public class TaskAddHandler implements Command {
   Statement stmt;
+  MemberValidatorHandler memberValidatorHandler;
 
-  public TaskAddHandler(Statement stmt) {
+  public TaskAddHandler(Statement stmt, MemberValidatorHandler memberValidatorHandler) {
+    this.memberValidatorHandler = memberValidatorHandler;
     this.stmt = stmt;
   }
 

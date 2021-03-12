@@ -4,8 +4,6 @@ import com.eomcs.driver.Statement;
 import com.eomcs.pms.domain.Task;
 import com.eomcs.util.Prompt;
 
-import java.util.Iterator;
-
 public class TaskDetailHandler implements Command {
     Statement stmt;
 
@@ -20,9 +18,7 @@ public class TaskDetailHandler implements Command {
 
         int no = Prompt.inputInt("번호? ");
 
-        Iterator<String> results = stmt.excuteQuery("task/select", Integer.toString(no));
-
-        String[] fields = results.next().split(",");
+        String[] fields = stmt.excuteQuery("task/select", Integer.toString(no)).next().split(",");
 
         System.out.printf("내용: %s\n", fields[1]);
         System.out.printf("마감일: %s\n", fields[2]);

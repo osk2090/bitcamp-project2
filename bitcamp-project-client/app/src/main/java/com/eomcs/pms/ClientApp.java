@@ -54,7 +54,7 @@ public class ClientApp {
 
     MemberValidatorHandler memberValidatorHandler = new MemberValidatorHandler(stmt);
 
-    commandMap.put("/task/add", new TaskAddHandler(stmt));
+    commandMap.put("/task/add", new TaskAddHandler(stmt, memberValidatorHandler));
     commandMap.put("/task/list", new TaskListHandler(stmt));
     commandMap.put("/task/detail", new TaskDetailHandler(stmt));
     commandMap.put("/task/update", new TaskUpdateHandler(stmt, memberValidatorHandler));

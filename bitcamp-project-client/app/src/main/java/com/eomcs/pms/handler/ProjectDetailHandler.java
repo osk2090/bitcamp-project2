@@ -3,8 +3,6 @@ package com.eomcs.pms.handler;
 import com.eomcs.driver.Statement;
 import com.eomcs.util.Prompt;
 
-import java.util.Iterator;
-
 public class ProjectDetailHandler implements Command {
   Statement stmt;
 
@@ -19,9 +17,7 @@ public class ProjectDetailHandler implements Command {
 
     int no = Prompt.inputInt("번호? ");
 
-    Iterator<String> results = stmt.excuteQuery("project/select", Integer.toString(no));
-
-    String[] fields = results.next().split(",");
+    String[] fields = stmt.excuteQuery("project/select", Integer.toString(no)).next().split(",");
 
     System.out.printf("프로젝트명: %s\n", fields[1]);
     System.out.printf("내용: %s\n", fields[2]);

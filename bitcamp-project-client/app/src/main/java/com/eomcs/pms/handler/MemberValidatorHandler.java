@@ -11,7 +11,7 @@ public class MemberValidatorHandler {
     this.stmt = stmt;
   }
 
-  public String inputMember(String promptTitle) throws Exception {
+  public String inputMember(String promptTitle) {
 
     while (true) {
       String name = Prompt.inputString(promptTitle);
@@ -26,7 +26,8 @@ public class MemberValidatorHandler {
     }
   }
 
-  public String inputMembers(String promptTitle) throws Exception {
+  public String inputMembers(String promptTitle) {
+
     String members = "";
     while (true) {
       String name = inputMember(promptTitle);

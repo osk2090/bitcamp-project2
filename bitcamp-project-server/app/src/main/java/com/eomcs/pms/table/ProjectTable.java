@@ -59,12 +59,13 @@ public class ProjectTable implements DataTable {
         break;
       case "project/selectall":
         for (Project p : list) {
-          response.appendData(String.format("%d,%s,%s,%s,%s",
+          response.appendData(String.format("%d,%s,%s,%s,%s,%s",
                   p.getNo(),
                   p.getTitle(),
-                  p.getContent(),
                   p.getStartDate(),
-                  p.getEndDate()
+                  p.getEndDate(),
+                  p.getOwner(),
+                  p.getMembers()
           ));
         }
           break;
