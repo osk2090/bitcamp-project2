@@ -1,9 +1,8 @@
 package com.eomcs.pms.handler;
 
-import com.eomcs.pms.domain.Task;
-import com.eomcs.pms.driver.Statement;
-
 import java.util.Iterator;
+import com.eomcs.driver.Statement;
+import com.eomcs.pms.domain.Task;
 
 public class TaskListHandler implements Command {
 
@@ -20,14 +19,14 @@ public class TaskListHandler implements Command {
     Iterator<String> results = stmt.executeQuery("task/selectall");
 
     while (results.hasNext()) {
-
       String[] fields = results.next().split(",");
-      System.out.printf("%s, %s, %s, %s, %s",
-              fields[0],
-              fields[1],
-              fields[2],
-              Task.getStatusLabel(Integer.parseInt(fields[3])),
-              fields[4]);
+      System.out.printf("%s, %s, %s, %s, %s\n", 
+          fields[0], 
+          fields[1], 
+          fields[2],
+          Task.getStatusLabel(Integer.parseInt(fields[3])),
+          fields[4]);
     }
   }
+
 }

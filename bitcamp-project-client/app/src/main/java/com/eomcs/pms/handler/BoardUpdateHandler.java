@@ -1,6 +1,6 @@
 package com.eomcs.pms.handler;
 
-import com.eomcs.pms.driver.Statement;
+import com.eomcs.driver.Statement;
 import com.eomcs.util.Prompt;
 
 public class BoardUpdateHandler implements Command {
@@ -23,13 +23,13 @@ public class BoardUpdateHandler implements Command {
     String content = Prompt.inputString(String.format("내용(%s)? ", fields[2]));
 
     String input = Prompt.inputString("정말 변경하시겠습니까?(y/N) ");
-
     if (!input.equalsIgnoreCase("Y")) {
       System.out.println("게시글 변경을 취소하였습니다.");
       return;
     }
 
     stmt.executeUpdate("board/update", String.format("%d,%s,%s", no, title, content));
+
     System.out.println("게시글을 변경하였습니다.");
   }
 }

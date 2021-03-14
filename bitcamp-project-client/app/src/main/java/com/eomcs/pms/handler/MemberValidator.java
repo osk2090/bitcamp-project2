@@ -1,13 +1,13 @@
 package com.eomcs.pms.handler;
 
-import com.eomcs.pms.driver.Statement;
+import com.eomcs.driver.Statement;
 import com.eomcs.util.Prompt;
 
-public class MemberValidatorHandler {
+public class MemberValidator {
 
   Statement stmt;
 
-  public MemberValidatorHandler(Statement stmt) {
+  public MemberValidator(Statement stmt) {
     this.stmt = stmt;
   }
 
@@ -17,7 +17,7 @@ public class MemberValidatorHandler {
       String name = Prompt.inputString(promptTitle);
       if (name.length() == 0) {
         return null;
-      }
+      } 
 
       try {
         return this.stmt.executeQuery("member/selectByName", name).next().split(",")[1];
@@ -41,4 +41,11 @@ public class MemberValidatorHandler {
       }
     }
   }
+
 }
+
+
+
+
+
+

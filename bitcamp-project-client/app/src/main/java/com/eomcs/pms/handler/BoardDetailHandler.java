@@ -1,9 +1,8 @@
 package com.eomcs.pms.handler;
 
-import com.eomcs.pms.driver.Statement;
-import com.eomcs.util.Prompt;
-
 import java.util.Iterator;
+import com.eomcs.driver.Statement;
+import com.eomcs.util.Prompt;
 
 public class BoardDetailHandler implements Command {
 
@@ -15,7 +14,6 @@ public class BoardDetailHandler implements Command {
 
   @Override
   public void service() throws Exception {
-
     System.out.println("[게시글 상세보기]");
 
     int no = Prompt.inputInt("번호? ");
@@ -31,3 +29,9 @@ public class BoardDetailHandler implements Command {
     System.out.printf("조회수: %s\n", fields[5]);
   }
 }
+
+
+
+
+
+

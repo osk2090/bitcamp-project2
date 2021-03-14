@@ -1,6 +1,6 @@
 package com.eomcs.pms.handler;
 
-import com.eomcs.pms.driver.Statement;
+import com.eomcs.driver.Statement;
 import com.eomcs.util.Prompt;
 
 public class MemberDetailHandler implements Command {
@@ -13,7 +13,6 @@ public class MemberDetailHandler implements Command {
 
   @Override
   public void service() throws Exception {
-
     System.out.println("[회원 상세보기]");
 
     int no = Prompt.inputInt("번호? ");

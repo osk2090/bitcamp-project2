@@ -1,9 +1,10 @@
 package com.eomcs.pms.handler;
 
-import com.eomcs.pms.driver.Statement;
+import com.eomcs.driver.Statement;
 import com.eomcs.util.Prompt;
 
 public class ProjectDetailHandler implements Command {
+
   Statement stmt;
 
   public ProjectDetailHandler(Statement stmt) {
@@ -12,11 +13,9 @@ public class ProjectDetailHandler implements Command {
 
   @Override
   public void service() throws Exception {
-
     System.out.println("[프로젝트 상세보기]");
 
     int no = Prompt.inputInt("번호? ");
-    stmt.executeQuery("project/select", Integer.toString(no));
 
     String[] fields = stmt.executeQuery("project/select", Integer.toString(no)).next().split(",");
 

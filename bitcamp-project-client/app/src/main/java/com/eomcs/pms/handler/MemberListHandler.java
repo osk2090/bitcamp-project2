@@ -1,10 +1,11 @@
 package com.eomcs.pms.handler;
 
-import com.eomcs.pms.driver.Statement;
+import com.eomcs.driver.Statement;
 
 import java.util.Iterator;
 
 public class MemberListHandler implements Command {
+
   Statement stmt;
 
   public MemberListHandler(Statement stmt) {
@@ -20,11 +21,11 @@ public class MemberListHandler implements Command {
     while (results.hasNext()) {
       String[] fields = results.next().split(",");
       System.out.printf("%s, %s, %s, %s, %s\n",
-              fields[0],
-              fields[1],
-              fields[2],
-              fields[3],
-              fields[4]);
+          fields[0], 
+          fields[1], 
+          fields[2],
+          fields[3],
+          fields[4]);
     }
   }
 }
