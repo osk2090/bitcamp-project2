@@ -26,15 +26,8 @@ public class Project {
 
   @Override
   public String toString() {
-    return "Project{" +
-            "no=" + no +
-            ", title='" + title + '\'' +
-            ", content='" + content + '\'' +
-            ", startDate=" + startDate +
-            ", endDate=" + endDate +
-            ", owner='" + owner + '\'' +
-            ", members='" + members + '\'' +
-            '}';
+    return "Project [no=" + no + ", title=" + title + ", content=" + content + ", startDate="
+        + startDate + ", endDate=" + endDate + ", owner=" + owner + ", members=" + members + "]";
   }
 
   public String toCsvString() {

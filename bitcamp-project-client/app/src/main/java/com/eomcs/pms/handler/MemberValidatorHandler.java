@@ -1,6 +1,6 @@
 package com.eomcs.pms.handler;
 
-import com.eomcs.driver.Statement;
+import com.eomcs.pms.driver.Statement;
 import com.eomcs.util.Prompt;
 
 public class MemberValidatorHandler {
@@ -18,8 +18,9 @@ public class MemberValidatorHandler {
       if (name.length() == 0) {
         return null;
       }
+
       try {
-        return stmt.excuteQuery("member/selectByName", name).next().split(",")[1];
+        return this.stmt.executeQuery("member/selectByName", name).next().split(",")[1];
       } catch (Exception e) {
         System.out.println("등록된 회원이 아닙니다.");
       }
@@ -27,7 +28,6 @@ public class MemberValidatorHandler {
   }
 
   public String inputMembers(String promptTitle) {
-
     String members = "";
     while (true) {
       String name = inputMember(promptTitle);
@@ -35,16 +35,10 @@ public class MemberValidatorHandler {
         return members;
       } else {
         if (!members.isEmpty()) {
-          members += ",";
+          members += "/";
         }
         members += name;
       }
     }
   }
 }
-
-
-
-
-
-

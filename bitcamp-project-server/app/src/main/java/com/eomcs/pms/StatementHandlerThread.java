@@ -12,20 +12,25 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
-//클라이언트 측의 Statement와 연결된 요청 처리를
-//별도의 실행 흐름으로 분리한다
+//클라이언트 측의 Statement와 연결된 후
+//그 요청 처리를 별도의 실행흐름으로 분리한다
+
 public class StatementHandlerThread extends Thread {
     Socket socket;
-    HashMap<String, DataTable> tableMap = new HashMap<String, DataTable>();
+    HashMap<String, DataTable> tableMap = new HashMap<>();
+
+    public static void main(String[] args) {
+        ServerApp app = new ServerApp(8888);
+        app.service();
+    }
 
     public StatementHandlerThread(Socket socket, HashMap<String, DataTable> tableMap) {
-        this.tableMap = tableMap;
         this.socket = socket;
+        this.tableMap = tableMap;
     }
 
     @Override
     public void run() {
-        //별도의 실행 흐름에서 수행할 작업이 있다면 이 메서드에 기술한다
 
         try (DataOutputStream out = new DataOutputStream(socket.getOutputStream());
              DataInputStream in = new DataInputStream(socket.getInputStream())) {
@@ -54,7 +59,7 @@ public class StatementHandlerThread extends Thread {
                         sendResponse(
                                 out,
                                 "error",
-                                e.getMessage());
+                                e.getMessage() != null ? e.getMessage() : e.getClass().getName());
                     }
 
                 } else {
@@ -119,8 +124,8 @@ public class StatementHandlerThread extends Thread {
             System.out.println("데이터:");
             for (String str : data) {
                 System.out.println(str);
-                System.out.println();
             }
         }
     }
+
 }

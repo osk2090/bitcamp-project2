@@ -1,4 +1,4 @@
-package com.eomcs.driver;
+package com.eomcs.pms.driver;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -14,16 +14,15 @@ public class Statement implements AutoCloseable {
 
     public Statement(String host, int port) throws Exception {
         socket = new Socket(host, port);
-        out = new DataOutputStream(socket.getOutputStream());
         in = new DataInputStream(socket.getInputStream());
-
+        out = new DataOutputStream(socket.getOutputStream());
     }
 
     //데이터를 입력,변경,삭제할 때 호출하는 메서드
-    public void excuteUpdate(String command, String... args) throws Exception {
+    public void executeUpdate(String command, String... args) throws Exception {
         request(command, args);
 
-        //서버의 응답 결과를 받는다
+        //서버에 응답 결과를 받는다
         String status = in.readUTF();
         in.readInt();
 
@@ -33,7 +32,7 @@ public class Statement implements AutoCloseable {
     }
 
     //데이터 목록을 조회하거나 특정 항목을 조회할 때 호출하는 메서드
-    public Iterator<String> excuteQuery(String command, String... args) throws Exception {
+    public Iterator<String> executeQuery(String command, String... args) throws Exception {
         request(command, args);
 
         //서버의 응답 결과를 받는다
@@ -53,7 +52,7 @@ public class Statement implements AutoCloseable {
         return results.iterator();
     }
 
-    private void request(String command, String... args) throws Exception {
+    public void request(String command, String... args) throws Exception {
         //서버에 요청을 보낸다
         out.writeUTF(command);
         out.writeInt(args.length);
@@ -63,17 +62,20 @@ public class Statement implements AutoCloseable {
         out.flush();
     }
 
-    public void close() {
+    @Override
+    public void close() throws Exception {
         try {
             in.close();
         } catch (Exception e) {
 
         }
+
         try {
             out.close();
         } catch (Exception e) {
 
         }
+
         try {
             socket.close();
         } catch (Exception e) {

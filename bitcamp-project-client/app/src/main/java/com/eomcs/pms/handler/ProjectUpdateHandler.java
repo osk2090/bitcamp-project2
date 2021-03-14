@@ -1,11 +1,12 @@
 package com.eomcs.pms.handler;
 
-import com.eomcs.driver.Statement;
+import com.eomcs.pms.driver.Statement;
 import com.eomcs.util.Prompt;
 
 import java.sql.Date;
 
 public class ProjectUpdateHandler implements Command {
+
   Statement stmt;
   MemberValidatorHandler memberValidatorHandler;
 
@@ -21,8 +22,7 @@ public class ProjectUpdateHandler implements Command {
 
     int no = Prompt.inputInt("번호? ");
 
-    String[] fields = stmt.excuteQuery("project/select", Integer.toString(no)).next().split(",");
-
+    String[] fields = stmt.executeQuery("project/select", Integer.toString(no)).next().split(",");
     String title = Prompt.inputString(String.format("프로젝트명(%s)? ", fields[1]));
     String content = Prompt.inputString(String.format("내용(%s)? ", fields[2]));
     Date startDate = Prompt.inputDate(String.format("시작일(%s)? ", fields[3]));
@@ -41,11 +41,13 @@ public class ProjectUpdateHandler implements Command {
     String input = Prompt.inputString("정말 변경하시겠습니까?(y/N) ");
 
     if (!input.equalsIgnoreCase("Y")) {
-      System.out.println("프로젝트을 변경하였습니다.");
+      System.out.println("프로젝트 변경을 취소하였습니다.");
       return;
     }
-    stmt.excuteUpdate("project/update", String.format("%d,%s,%s,%s,%s,%s,%s", no, title, content, startDate, endDate, owner, members));
-    System.out.println("프로젝트를 변경하였습니다.");
+
+    stmt.executeUpdate("project/update", String.format("%d,%s,%s,%s,%s,%s,%s", no, title, content, startDate, endDate, owner, members));
+
+    System.out.println("프로젝트을 변경하였습니다.");
   }
 }
 

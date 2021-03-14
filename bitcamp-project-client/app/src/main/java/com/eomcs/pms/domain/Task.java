@@ -22,13 +22,8 @@ public class Task {
 
   @Override
   public String toString() {
-    return "Task{" +
-            "no=" + no +
-            ", content='" + content + '\'' +
-            ", deadline=" + deadline +
-            ", owner='" + owner + '\'' +
-            ", status=" + status +
-            '}';
+    return "Task [no=" + no + ", content=" + content + ", deadline=" + deadline + ", owner=" + owner
+        + ", status=" + status + "]";
   }
 
   public String toCsvString() {

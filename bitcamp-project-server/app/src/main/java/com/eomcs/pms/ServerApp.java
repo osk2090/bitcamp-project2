@@ -13,8 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
-//1) 외부의 스레드 사용
-//2) 스태틱 중첩 클래스로 정의한 스레드 사용
+// 데이터를 파일에 보관하고 꺼내는 일을 할 애플리케이션
 public class ServerApp {
 
   int port;
@@ -43,11 +42,58 @@ public class ServerApp {
       System.out.println("서버 실행!");
 
       while (true) {
-        new StatementHandlerThread3(serverSocket.accept()).start();
+        new StatementHandlerThread(serverSocket.accept(), tableMap).start();
+        //스레드를 시작시키면 현재 실행 흐름과 별개로 실행 흐림이 만들어진다
+        // 그 흐름에서 스레드의 run() 메서드를 호출된다
+        //스레드를 시작시킨 후 즉시 리턴하기 때문에
+        // 대기열에 기다리고 있는 다음 클라이언트의 연결을 바로 승인할수 있다
+
       }
 
     } catch (Exception e) {
       System.out.println("서버 실행 중 오류 발생!");
+      e.printStackTrace();
+    }
+  }
+
+  private void processRequest(Socket socket) {
+    try (DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+        DataInputStream in = new DataInputStream(socket.getInputStream())) {
+
+      while (true) {
+        Request request = receiveRequest(in);
+        log(request);
+
+        if (request.getCommand().equals("quit")) {
+          sendResponse(out, "success");
+          break;
+        }
+
+        DataTable dataTable = findDataTable(request.getCommand());
+
+        if (dataTable != null) {
+          Response response = new Response();
+          try {
+            dataTable.service(request, response);          
+            sendResponse(
+                out, 
+                "success", 
+                response.getDataList().toArray(new String[response.getDataList().size()]));
+
+          } catch (Exception e) {
+            sendResponse(
+                out, 
+                "error", 
+                e.getMessage() != null ? e.getMessage() : e.getClass().getName());
+          }
+
+        } else {
+          sendResponse(out, "error", "해당 요청을 처리할 수 없습니다!");
+        }
+      }
+
+    } catch (Exception e) {
+      System.out.println("클라이언트의 요청을 처리하는 중에 오류 발생!");
       e.printStackTrace();
     }
   }
@@ -107,66 +153,5 @@ public class ServerApp {
     }
   }
 
-  public void processRequest(Socket socket) {
-    // 별도의 실행 흐름에서 수행할 작업이 있다면 이 메서드에 기술한다.
 
-    try (DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-         DataInputStream in = new DataInputStream(socket.getInputStream())) {
-
-      while (true) {
-        Request request = receiveRequest(in);
-        log(request);
-
-        if (request.getCommand().equals("quit")) {
-          sendResponse(out, "success");
-          break;
-        }
-
-        DataTable dataTable = findDataTable(request.getCommand());
-
-        if (dataTable != null) {
-          Response response = new Response();
-          try {
-            dataTable.service(request, response);
-            sendResponse(
-                    out,
-                    "success",
-                    response.getDataList().toArray(new String[response.getDataList().size()]));
-
-          } catch (Exception e) {
-            sendResponse(
-                    out,
-                    "error",
-                    e.getMessage() != null ? e.getMessage() : e.getClass().getName());
-          }
-
-        } else {
-          sendResponse(out, "error", "해당 요청을 처리할 수 없습니다!");
-        }
-      }
-
-    } catch (Exception e) {
-      System.out.println("클라이언트의 요청을 처리하는 중에 오류 발생!");
-      e.printStackTrace();
-    }
-
-  }
-
-
-  // non-static 중첩 클래스 = inner 클래스
-  // - inner 클래스는 바깥 클래스 입장에서 인스턴스 멤버이다.
-  // - 따라서 바깥 클래스에 소속된 다른 인스턴스 멤버(필드나 메서드)에 바로 접근할 수 있다.
-  class StatementHandlerThread3 extends Thread {
-
-    Socket socket;
-
-    public StatementHandlerThread3(Socket socket) {
-      this.socket = socket;
-    }
-
-    @Override
-    public void run() {
-      processRequest(this.socket);
-    }
-    }
 }

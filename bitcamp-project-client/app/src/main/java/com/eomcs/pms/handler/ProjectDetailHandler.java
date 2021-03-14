@@ -1,6 +1,6 @@
 package com.eomcs.pms.handler;
 
-import com.eomcs.driver.Statement;
+import com.eomcs.pms.driver.Statement;
 import com.eomcs.util.Prompt;
 
 public class ProjectDetailHandler implements Command {
@@ -16,8 +16,9 @@ public class ProjectDetailHandler implements Command {
     System.out.println("[프로젝트 상세보기]");
 
     int no = Prompt.inputInt("번호? ");
+    stmt.executeQuery("project/select", Integer.toString(no));
 
-    String[] fields = stmt.excuteQuery("project/select", Integer.toString(no)).next().split(",");
+    String[] fields = stmt.executeQuery("project/select", Integer.toString(no)).next().split(",");
 
     System.out.printf("프로젝트명: %s\n", fields[1]);
     System.out.printf("내용: %s\n", fields[2]);
