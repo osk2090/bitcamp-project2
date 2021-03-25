@@ -50,8 +50,16 @@ public class ProjectUpdateHandler implements Command {
       project.setContent(Prompt.inputString(String.format("내용(%s)? ", project.getContent())));
       project.setStartDate(Prompt.inputDate(String.format("시작일(%s)? ", project.getStartDate())));
       project.setEndDate(Prompt.inputDate(String.format("종료일(%s)? ", project.getEndDate())));
-      project.setOwner(memberValidator.inputMember(String.format("만든이(%s)?(취소: 빈 문자열) ", project.getOwner())));
-      project.setMembers(memberValidator.inputMembers(String.format("팀원(%s)?(완료: 빈 문자열) ", project.getMembers())));
+      project.setOwner(memberValidator.inputMember(String.format("만든이(%s)?(취소: 빈 문자열) ", project.getOwner())));//
+      if (project.getOwner() == null) {
+        System.out.println("프로젝트 변경을 취소합니다.");
+        return;
+      }
+      project.setMembers(memberValidator.inputMembers(String.format("팀원(%s)?(완료: 빈 문자열) ", project.getMembers())));//
+      if (project.getMembers() == null) {
+        System.out.println("프로젝트 변경을 취소합니다.");
+        return;
+      }
 
       String input = Prompt.inputString("정말 변경하시겠습니까?(y/N) ");
       if (!input.equalsIgnoreCase("Y")) {

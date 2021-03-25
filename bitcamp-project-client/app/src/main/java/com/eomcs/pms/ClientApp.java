@@ -52,19 +52,19 @@ public class ClientApp {
     commandMap.put("/member/update", new MemberUpdateHandler());
     commandMap.put("/member/delete", new MemberDeleteHandler());
 
-        MemberValidator memberValidator = new MemberValidator();
+    MemberValidator memberValidator = new MemberValidator();
 
-        commandMap.put("/project/add", new ProjectAddHandler(memberValidator));
-        commandMap.put("/project/list", new ProjectListHandler());
-        commandMap.put("/project/detail", new ProjectDetailHandler());
-        commandMap.put("/project/update", new ProjectUpdateHandler(memberValidator));
-        commandMap.put("/project/delete", new ProjectDeleteHandler());
+    commandMap.put("/project/add", new ProjectAddHandler(memberValidator));
+    commandMap.put("/project/list", new ProjectListHandler());
+    commandMap.put("/project/detail", new ProjectDetailHandler());
+    commandMap.put("/project/update", new ProjectUpdateHandler(memberValidator));
+    commandMap.put("/project/delete", new ProjectDeleteHandler());
 
-    //    commandMap.put("/task/add", new TaskAddHandler(stmt, memberValidator));
-    //    commandMap.put("/task/list", new TaskListHandler(stmt));
-    //    commandMap.put("/task/detail", new TaskDetailHandler(stmt));
-    //    commandMap.put("/task/update", new TaskUpdateHandler(stmt, memberValidator));
-    //    commandMap.put("/task/delete", new TaskDeleteHandler(stmt));
+    commandMap.put("/task/add", new TaskAddHandler(memberValidator));
+    commandMap.put("/task/list", new TaskListHandler());
+    commandMap.put("/task/detail", new TaskDetailHandler());
+    commandMap.put("/task/update", new TaskUpdateHandler(memberValidator));
+    commandMap.put("/task/delete", new TaskDeleteHandler());
 
     try {
 
