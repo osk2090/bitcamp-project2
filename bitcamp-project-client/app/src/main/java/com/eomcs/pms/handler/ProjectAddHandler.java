@@ -1,16 +1,17 @@
 package com.eomcs.pms.handler;
 
-import com.eomcs.driver.Statement;
 import com.eomcs.pms.domain.Project;
 import com.eomcs.util.Prompt;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+
 public class ProjectAddHandler implements Command {
 
-  Statement stmt;
   MemberValidator memberValidator;
 
-  public ProjectAddHandler(Statement stmt, MemberValidator memberValidator) {
-    this.stmt = stmt;
+  public ProjectAddHandler(MemberValidator memberValidator) {
     this.memberValidator = memberValidator;
   }
 
@@ -32,14 +33,21 @@ public class ProjectAddHandler implements Command {
 
     p.setMembers(memberValidator.inputMembers("팀원?(완료: 빈 문자열) "));
 
-    stmt.executeUpdate("project/insert", 
-        String.format("%s,%s,%s,%s,%s,%s", 
-            p.getTitle(),
-            p.getContent(),
-            p.getStartDate(),
-            p.getEndDate(),
-            p.getOwner(),
-            p.getMembers()));
+    try (Connection con = DriverManager.getConnection(
+            "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
+         PreparedStatement stmt = con.prepareStatement(
+                 "insert into pms_member(title,content,sdt,edt,owner,members) values (?,?,?,?,?,?)"
+         )) {
+
+      stmt.setString(1, p.getTitle());
+      stmt.setString(2, p.getContent());
+      stmt.setDate(3, p.getStartDate());
+      stmt.setDate(4, p.getEndDate());
+      stmt.setString(5, p.getOwner());
+      stmt.setString(6, p.getMembers());
+
+      stmt.executeUpdate();
+    }
 
     System.out.println("프로젝트를 등록했습니다.");
   }
