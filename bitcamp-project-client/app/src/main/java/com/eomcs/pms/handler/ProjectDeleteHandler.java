@@ -20,6 +20,7 @@ public class ProjectDeleteHandler implements Command {
          PreparedStatement stmt = con.prepareStatement(
                  "delete from pms_project where no=?"
          )) {
+
       stmt.setInt(1, no);
       if (stmt.executeUpdate() == 0) {
         System.out.println("해당 번호의 프로젝트가 없습니다.");

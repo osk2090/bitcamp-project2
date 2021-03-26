@@ -27,7 +27,7 @@ public class MemberDeleteHandler implements Command {
                  "delete from pms_member where no=?"
          )) {
       stmt.setInt(1, no);
-      if (stmt.executeUpdate() == 0) {
+      if (stmt.executeUpdate() == 0) {//executeUpdate은 몇개가 삭제되었는지 몇개를 행동했는지 리턴해준다
         System.out.println("해당 번호의 회원이 없습니다.");
       } else {
         System.out.println("회원을 삭제하였습니다.");

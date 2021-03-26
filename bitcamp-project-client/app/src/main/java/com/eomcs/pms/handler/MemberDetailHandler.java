@@ -30,8 +30,7 @@ public class MemberDetailHandler implements Command {
         System.out.printf("이메일: %s\n", rs.getString("email"));
         System.out.printf("사진: %s\n", rs.getString("photo"));
         System.out.printf("전화: %s\n", rs.getString("tel"));
-        System.out.printf("가입일: %s\n", rs.getString("cdt"));
-
+        System.out.printf("가입일: %s\n", rs.getDate("cdt"));
       }
     }
   }

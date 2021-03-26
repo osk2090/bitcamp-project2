@@ -30,8 +30,8 @@ public class TaskDetailHandler implements Command {
 
         System.out.printf("내용: %s\n", rs.getString("content"));
         System.out.printf("마감일: %s\n", rs.getDate("deadline"));
+        System.out.printf("상태: %s\n", Task.getStatusLabel(rs.getInt("status")));
         System.out.printf("담당자: %s\n", rs.getString("owner"));
-        System.out.printf("상태: %s\n", Task.getStatusLabel(Integer.parseInt(rs.getString("status"))));
       }
     }
   }

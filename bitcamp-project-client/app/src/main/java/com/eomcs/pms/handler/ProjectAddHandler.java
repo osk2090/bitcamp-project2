@@ -36,7 +36,8 @@ public class ProjectAddHandler implements Command {
     try (Connection con = DriverManager.getConnection(
             "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
          PreparedStatement stmt = con.prepareStatement(
-                 "insert into pms_project(title,content,sdt,edt,owner,members) values (?,?,?,?,?,?)")) {
+                 "insert into pms_project(title,content,sdt,edt,owner,members) " +
+                         " values (?,?,?,?,?,?)")) {
 
       stmt.setString(1, p.getTitle());
       stmt.setString(2, p.getContent());

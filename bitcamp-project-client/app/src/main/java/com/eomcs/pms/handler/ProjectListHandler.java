@@ -14,7 +14,7 @@ public class ProjectListHandler implements Command {
     try (Connection con = DriverManager.getConnection(
             "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
          PreparedStatement stmt = con.prepareStatement(
-                 "select no,title,sdt,edt,owner,members from pms_project order by no desc");
+                 "select no,title,sdt,edt,owner,members from pms_project order by title asc");
          ResultSet rs = stmt.executeQuery()) {
 
       while (rs.next()) {
