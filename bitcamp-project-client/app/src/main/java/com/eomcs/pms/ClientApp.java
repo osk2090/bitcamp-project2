@@ -57,8 +57,8 @@ public class ClientApp {
     commandMap.put("/project/add", new ProjectAddHandler(memberValidator));
     commandMap.put("/project/list", new ProjectListHandler());
     commandMap.put("/project/detail", new ProjectDetailHandler());
-    commandMap.put("/project/update", new ProjectUpdateHandler(memberValidator));
     commandMap.put("/project/delete", new ProjectDeleteHandler());
+    commandMap.put("/project/update", new ProjectUpdateHandler(memberValidator));
 
     commandMap.put("/task/add", new TaskAddHandler(memberValidator));
     commandMap.put("/task/list", new TaskListHandler());

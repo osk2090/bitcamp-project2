@@ -24,7 +24,7 @@ public class TaskAddHandler implements Command {
     t.setDeadline(Prompt.inputDate("마감일? "));
     t.setStatus(Prompt.inputInt("상태?\n0: 신규\n1: 진행중\n2: 완료\n> "));
 
-    t.setOwner(memberValidator.inputMember("담당자?(취소: 빈 문자열) "));
+//    t.setOwner(memberValidator.inputMember("담당자?(취소: 빈 문자열) "));
     if (t.getOwner() == null) {
       System.out.println("작업 등록을 취소하였습니다.");
       return;

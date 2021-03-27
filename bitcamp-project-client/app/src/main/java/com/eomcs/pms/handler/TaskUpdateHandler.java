@@ -49,7 +49,7 @@ public class TaskUpdateHandler implements Command {//
       task.setStatus(Prompt.inputInt(String.format(
               "상태(%s)?\n0: 신규\n1: 진행중\n2: 완료\n> ",
               Task.getStatusLabel(task.getStatus()))));
-      task.setOwner(memberValidator.inputMember(String.format("담당자(%s)?(취소: 빈 문자열) ", task.getOwner())));
+//      task.setOwner(memberValidator.inputMember(String.format("담당자(%s)?(취소: 빈 문자열) ", task.getOwner())));
 
       if (task.getOwner() == null) {
         System.out.println("작업 변경을 취소합니다.");
