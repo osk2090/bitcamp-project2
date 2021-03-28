@@ -24,10 +24,15 @@ public class TaskDeleteHandler implements Command {
             "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
          PreparedStatement stmt = con.prepareStatement(
                  "delete from pms_task where no=?")) {
+
+      con.setAutoCommit(false);
+
+      //프로젝트 정보 삭제
       stmt.setInt(1, no);
       if (stmt.executeUpdate() == 0) {
         System.out.println("해당 번호의 작업이 없습니다.");
       } else {
+        con.commit();
         System.out.println("작업을 삭제하였습니다.");
       }
     }
