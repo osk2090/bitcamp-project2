@@ -1,12 +1,11 @@
 package com.eomcs.pms.handler;
 
-import com.eomcs.pms.domain.Board;
-import com.eomcs.util.Prompt;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import com.eomcs.pms.domain.Board;
+import com.eomcs.util.Prompt;
 
 public class BoardUpdateHandler implements Command {
 
@@ -17,11 +16,11 @@ public class BoardUpdateHandler implements Command {
     int no = Prompt.inputInt("번호? ");
 
     try (Connection con = DriverManager.getConnection(
-            "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
-         PreparedStatement stmt = con.prepareStatement(
-                 "select no,title,content from pms_board where no=?");
-         PreparedStatement stmt2 = con.prepareStatement(
-                 "update pms_board set title=?, content=? where no=?")) {
+        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
+        PreparedStatement stmt = con.prepareStatement(
+            "select no,title,content from pms_board where no=?");
+        PreparedStatement stmt2 = con.prepareStatement(
+            "update pms_board set title=?, content=? where no=?")) {
 
       Board board = new Board();
 
@@ -33,7 +32,7 @@ public class BoardUpdateHandler implements Command {
           return;
         }
 
-        board.setNo(no);
+        board.setNo(no); 
         board.setTitle(rs.getString("title"));
         board.setContent(rs.getString("content"));
       }

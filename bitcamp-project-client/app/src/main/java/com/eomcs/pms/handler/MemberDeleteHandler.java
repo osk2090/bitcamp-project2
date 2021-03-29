@@ -1,10 +1,9 @@
 package com.eomcs.pms.handler;
 
-import com.eomcs.util.Prompt;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import com.eomcs.util.Prompt;
 
 public class MemberDeleteHandler implements Command {
 
@@ -21,13 +20,12 @@ public class MemberDeleteHandler implements Command {
     }
 
     try (Connection con = DriverManager.getConnection(
-            "jdbc:mysql://localhost:3306/studydb?user=study&password=1111"
-    );
-         PreparedStatement stmt = con.prepareStatement(
-                 "delete from pms_member where no=?"
-         )) {
+        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
+        PreparedStatement stmt = con.prepareStatement(
+            "delete from pms_member where no=?")) {
+
       stmt.setInt(1, no);
-      if (stmt.executeUpdate() == 0) {//executeUpdate은 몇개가 삭제되었는지 몇개를 행동했는지 리턴해준다
+      if (stmt.executeUpdate() == 0) {
         System.out.println("해당 번호의 회원이 없습니다.");
       } else {
         System.out.println("회원을 삭제하였습니다.");

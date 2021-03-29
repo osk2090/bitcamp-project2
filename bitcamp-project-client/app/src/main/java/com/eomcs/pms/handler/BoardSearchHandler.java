@@ -1,11 +1,10 @@
 package com.eomcs.pms.handler;
 
-import com.eomcs.util.Prompt;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import com.eomcs.util.Prompt;
 
 public class BoardSearchHandler implements Command {
 
@@ -18,15 +17,15 @@ public class BoardSearchHandler implements Command {
       return;
     }
 
-    try (Connection con = DriverManager.getConnection( //
-            "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
-         PreparedStatement stmt = con.prepareStatement( //
-                 "select no,title,writer,cdt,vw_cnt"
-                         + " from pms_board "//공백을 앞으로준다
-                         + " where title like concat('%',?,'%')"
-                         + " or content like concat('%',?,'%')"
-                         + " or writer like concat('%',?,'%')"
-                         + " order by no desc")) {
+    try (Connection con = DriverManager.getConnection(
+        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
+        PreparedStatement stmt = con.prepareStatement(
+            "select no,title,writer,cdt,vw_cnt"
+                + " from pms_board"
+                + " where title like concat('%',?,'%')"
+                + " or content like concat('%',?,'%')"
+                + " or writer like concat('%',?,'%')"
+                + " order by no desc")) {
 
       stmt.setString(1, keyword);
       stmt.setString(2, keyword);
@@ -39,13 +38,12 @@ public class BoardSearchHandler implements Command {
         }
 
         do {
-          System.out.printf("%d, %s, %s, %s, %d\n",
-                  rs.getInt("no"),
-                  rs.getString("title"),
-                  rs.getString("writer"),
-                  rs.getDate("cdt"),
-                  rs.getInt("vw_cnt"));
-
+          System.out.printf("%d, %s, %s, %s, %d\n", 
+              rs.getInt("no"), 
+              rs.getString("title"), 
+              rs.getString("writer"),
+              rs.getDate("cdt"),
+              rs.getInt("vw_cnt"));
         } while (rs.next());
       }
     }

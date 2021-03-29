@@ -1,10 +1,9 @@
 package com.eomcs.pms.handler;
 
-import com.eomcs.util.Prompt;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import com.eomcs.util.Prompt;
 
 public class BoardDeleteHandler implements Command {
 
@@ -20,10 +19,10 @@ public class BoardDeleteHandler implements Command {
       return;
     }
 
-    try (Connection con = DriverManager.getConnection( //
-            "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
-         PreparedStatement stmt = con.prepareStatement( //
-                 "delete from pms_board where no=?")) {
+    try (Connection con = DriverManager.getConnection(
+        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
+        PreparedStatement stmt = con.prepareStatement(
+            "delete from pms_board where no=?")) {
 
       stmt.setInt(1, no);
       if (stmt.executeUpdate() == 0) {
@@ -34,3 +33,9 @@ public class BoardDeleteHandler implements Command {
     }
   }
 }
+
+
+
+
+
+

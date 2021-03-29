@@ -21,9 +21,9 @@ public class TaskDeleteHandler implements Command {
     }
 
     try (Connection con = DriverManager.getConnection(
-            "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
-         PreparedStatement stmt = con.prepareStatement(
-                 "delete from pms_task where no=?")) {
+        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
+        PreparedStatement stmt = con.prepareStatement(
+            "delete from pms_task where no=?")) {
 
       stmt.setInt(1, no);
       if (stmt.executeUpdate() == 0) {

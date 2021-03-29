@@ -8,15 +8,8 @@ public class Task {
   private Date deadline;
   private Member owner;
   private int status;
-
-
-  public Member getOwner() {
-    return owner;
-  }
-
-  public void setOwner(Member owner) {
-    this.owner = owner;
-  }
+  private int projectNo;
+  private String projectTitle;
 
   @Override
   public String toString() {
@@ -26,7 +19,17 @@ public class Task {
             ", deadline=" + deadline +
             ", owner=" + owner +
             ", status=" + status +
+            ", projectNo=" + projectNo +
+            ", projectTitle='" + projectTitle + '\'' +
             '}';
+  }
+
+  public Member getOwner() {
+    return owner;
+  }
+
+  public void setOwner(Member owner) {
+    this.owner = owner;
   }
 
   public Task() {}
@@ -55,6 +58,23 @@ public class Task {
   public void setStatus(int status) {
     this.status = status;
   }
+
+  public int getProjectNo() {
+    return projectNo;
+  }
+
+  public void setProjectNo(int projectNo) {
+    this.projectNo = projectNo;
+  }
+
+  public String getProjectTitle() {
+    return projectTitle;
+  }
+
+  public void setProjectTitle(String projectTitle) {
+    this.projectTitle = projectTitle;
+  }
+
 
   public static String getStatusLabel(int status) {
     switch (status) {

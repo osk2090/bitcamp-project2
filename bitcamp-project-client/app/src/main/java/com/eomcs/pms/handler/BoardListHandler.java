@@ -11,23 +11,22 @@ public class BoardListHandler implements Command {
   public void service() throws Exception {
     System.out.println("[게시글 목록]");
 
-    try (Connection con = DriverManager.getConnection( //
+    try (Connection con = DriverManager.getConnection(
         "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
-        PreparedStatement stmt = con.prepareStatement( //
+        PreparedStatement stmt = con.prepareStatement(
             "select no,title,writer,cdt,vw_cnt from pms_board order by no desc");
-        //컨텐츠 용량이 클수 있어서 해당 콜론의 값만 가져온다
-
         ResultSet rs = stmt.executeQuery()) {
 
       while (rs.next()) {
-        System.out.printf("%d, %s, %s, %s, %d\n",
-            rs.getInt("no"),
-            rs.getString("title"),
+        System.out.printf("%d, %s, %s, %s, %d\n", 
+            rs.getInt("no"), 
+            rs.getString("title"), 
             rs.getString("writer"),
             rs.getDate("cdt"),
             rs.getInt("vw_cnt"));
       }
     }
+
   }
 }
 
