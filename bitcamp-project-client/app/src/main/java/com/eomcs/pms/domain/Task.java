@@ -7,6 +7,8 @@ public class Task {
   private String content;
   private Date deadline;
   private Member owner;
+  private int status;
+
 
   public Member getOwner() {
     return owner;
@@ -15,8 +17,6 @@ public class Task {
   public void setOwner(Member owner) {
     this.owner = owner;
   }
-
-  private int status;
 
   @Override
   public String toString() {
