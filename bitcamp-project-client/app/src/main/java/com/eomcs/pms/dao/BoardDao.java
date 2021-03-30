@@ -104,7 +104,6 @@ public class BoardDao {
                 Member writer = new Member();//멤버 객체를 접근
                 writer.setNo(rs.getInt("writer_no"));//거기서 writer_no로 즉 m.no로 접근하여 해당 데이터를 삽입
                 writer.setName(rs.getString("writer_name"));//동일
-                writer.setEmail(rs.getString("writer_email"));
                 board.setWriter(writer);//위에 만든 객체를 통째로 넘긴다
 
                 return board;

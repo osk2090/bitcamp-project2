@@ -38,7 +38,7 @@ public class BoardDetailHandler implements Command {
 
     System.out.printf("제목: %s\n", b.getTitle());
     System.out.printf("내용: %s\n", b.getContent());
-    System.out.printf("작성자: %s\n", b.getWriter());
+    System.out.printf("작성자: %s\n", b.getWriter().getName());
     System.out.printf("등록일: %s\n", formatter.format(b.getRegisteredDate()));
     System.out.printf("조회수: %s\n", b.getViewCount());
     System.out.printf("좋아요: %s\n", b.getLike());
