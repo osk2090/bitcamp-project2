@@ -16,7 +16,6 @@ public class MemberValidator {
   }
 
   public Member inputMember(String promptTitle) throws Exception {
-
     while (true) {
       String name = Prompt.inputString(promptTitle);
       if (name.length() == 0) {
@@ -24,7 +23,6 @@ public class MemberValidator {
       }
 
       Member m = memberDao.findByName(name);
-
       if (m != null) {
         return m;
       }
@@ -45,9 +43,3 @@ public class MemberValidator {
     }
   }
 }
-
-
-
-
-
-

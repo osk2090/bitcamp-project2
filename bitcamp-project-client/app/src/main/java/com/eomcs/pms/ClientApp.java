@@ -2,11 +2,11 @@ package com.eomcs.pms;
 
 import com.eomcs.pms.dao.BoardDao;
 import com.eomcs.pms.dao.MemberDao;
+import com.eomcs.pms.dao.ProjectDao;
+import com.eomcs.pms.dao.TaskDao;
 import com.eomcs.pms.handler.*;
 import com.eomcs.util.Prompt;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -42,15 +42,8 @@ public class ClientApp {
 
     BoardDao boardDao = new BoardDao();
     MemberDao memberDao = new MemberDao();
-
-    // DAO 객체가 사용할 Connection 객체를 생성하여 주입한다.
-    try {
-      Connection con = DriverManager.getConnection(
-              "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
-      boardDao.con = con;
-    } catch (Exception e) {
-      System.out.println("DB 커넥션 객체 생성 중 오류 발생!");
-    }
+    ProjectDao projectDao = new ProjectDao();
+    TaskDao taskDao = new TaskDao();
 
     // 사용자 명령을 처리하는 객체를 맵에 보관한다.
     HashMap<String,Command> commandMap = new HashMap<>();
@@ -70,17 +63,17 @@ public class ClientApp {
 
     MemberValidator memberValidator = new MemberValidator(memberDao);
 
-    commandMap.put("/project/add", new ProjectAddHandler(memberValidator));
-    commandMap.put("/project/list", new ProjectListHandler());
-    commandMap.put("/project/detail", new ProjectDetailHandler());
-    commandMap.put("/project/update", new ProjectUpdateHandler(memberValidator));
-    commandMap.put("/project/delete", new ProjectDeleteHandler());
+    commandMap.put("/project/add", new ProjectAddHandler(memberValidator, projectDao));
+    commandMap.put("/project/list", new ProjectListHandler(projectDao));
+    commandMap.put("/project/detail", new ProjectDetailHandler(projectDao));
+    commandMap.put("/project/update", new ProjectUpdateHandler(projectDao, memberValidator));
+    commandMap.put("/project/delete", new ProjectDeleteHandler(projectDao));
 
-    commandMap.put("/task/add", new TaskAddHandler(memberValidator));
-    commandMap.put("/task/list", new TaskListHandler());
-    commandMap.put("/task/detail", new TaskDetailHandler());
-    commandMap.put("/task/update", new TaskUpdateHandler(memberValidator));
-    commandMap.put("/task/delete", new TaskDeleteHandler());
+    commandMap.put("/task/add", new TaskAddHandler(projectDao, taskDao, memberValidator));
+    commandMap.put("/task/list", new TaskListHandler(taskDao));
+    commandMap.put("/task/detail", new TaskDetailHandler());//
+    commandMap.put("/task/update", new TaskUpdateHandler(memberValidator));//
+    commandMap.put("/task/delete", new TaskDeleteHandler());//
 
     try {
 

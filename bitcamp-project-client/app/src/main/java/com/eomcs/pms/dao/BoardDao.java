@@ -14,8 +14,7 @@ import java.util.List;
 
 public class BoardDao {
 
-    public static Connection con;
-//    Connection con;
+    Connection con;
 
     public BoardDao() throws Exception {
         this.con = DriverManager.getConnection(
@@ -24,7 +23,7 @@ public class BoardDao {
 
     // 이제 메서드들은 인스턴스 필드에 들어있는 Connection 객체를 사용해야 하기 때문에
     // 스태틱 메서드가 아닌 인스턴스 메서드로 선언해야 한다.
-    public int insert(Board board, Connection con) throws Exception {
+    public int insert(Board board) throws Exception {
         try (PreparedStatement stmt = con.prepareStatement(
                 "insert into pms_board(title, content, writer) values(?,?,?)");) {
 
@@ -188,8 +187,5 @@ public class BoardDao {
             }
         }
         return list;
-    }
-
-    public void insert(Board b) {
     }
 }
