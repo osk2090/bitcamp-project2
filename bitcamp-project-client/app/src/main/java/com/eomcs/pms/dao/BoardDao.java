@@ -14,37 +14,25 @@ import java.util.List;
 
 public class BoardDao {
 
-//    static Connection con = DriverManager.getConnection(
-//            "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
-    /*
-    해당 코드는 예외가 발생해서 예외처리를 해줘야 되는데 메서드 안이 아닌
-    클래스안에서는 try-catch문을 삽입할 수 없다
-    그래서 static 블럭을 생성하여 아래 코드처럼 인스턴스화 할때를 static 블럭안에 try-catch문 안에 넣어준다
-     */
+    public static Connection con;
+//    Connection con;
 
-
-    //이제 Connection 객체는 BoardDao 마다 다룰 수 있다
-
-    Connection con;
-
-    //이렇게 생성자에서 Connection 객체를 파라미터로 요구하면
-    //Connection 필수 항목이 된다
-    //스태틱 필드로는 필수항목,선택항목을 제dk할 수 있다
     public BoardDao() throws Exception {
         this.con = DriverManager.getConnection(
                 "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
     }
 
-
+    // 이제 메서드들은 인스턴스 필드에 들어있는 Connection 객체를 사용해야 하기 때문에
+    // 스태틱 메서드가 아닌 인스턴스 메서드로 선언해야 한다.
     public int insert(Board board, Connection con) throws Exception {
-        try (PreparedStatement stmt =
-                     con.prepareStatement("insert into pms_board(title, content, writer) values(?,?,?)");) {
+        try (PreparedStatement stmt = con.prepareStatement(
+                "insert into pms_board(title, content, writer) values(?,?,?)");) {
 
             stmt.setString(1, board.getTitle());
             stmt.setString(2, board.getContent());
             stmt.setInt(3, board.getWriter().getNo());
 
-            return stmt.executeUpdate();//몇개가 넘어가는지 리턴
+            return stmt.executeUpdate();
         }
     }
 

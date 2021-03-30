@@ -1,12 +1,12 @@
 package com.eomcs.pms;
 
 import com.eomcs.pms.dao.BoardDao;
+import com.eomcs.pms.dao.MemberDao;
 import com.eomcs.pms.handler.*;
 import com.eomcs.util.Prompt;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -40,16 +40,16 @@ public class ClientApp {
 
   public void execute() throws Exception {
 
-    //핸들러가 사용할 DAO객체 준비
     BoardDao boardDao = new BoardDao();
+    MemberDao memberDao = new MemberDao();
 
-      //dao중 객체가 사용할 connection 객체를 생성하여 주입
+    // DAO 객체가 사용할 Connection 객체를 생성하여 주입한다.
     try {
       Connection con = DriverManager.getConnection(
               "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
-      BoardDao = con;
-    } catch (SQLException e) {
-      e.printStackTrace();
+      boardDao.con = con;
+    } catch (Exception e) {
+      System.out.println("DB 커넥션 객체 생성 중 오류 발생!");
     }
 
     // 사용자 명령을 처리하는 객체를 맵에 보관한다.
@@ -62,19 +62,19 @@ public class ClientApp {
     commandMap.put("/board/delete", new BoardDeleteHandler(boardDao));
     commandMap.put("/board/search", new BoardSearchHandler(boardDao));
 
-    commandMap.put("/member/add", new MemberAddHandler());
-    commandMap.put("/member/list", new MemberListHandler());
-    commandMap.put("/member/detail", new MemberDetailHandler());
-    commandMap.put("/member/update", new MemberUpdateHandler());
-    commandMap.put("/member/delete", new MemberDeleteHandler());
+    commandMap.put("/member/add", new MemberAddHandler(memberDao));
+    commandMap.put("/member/list", new MemberListHandler(memberDao));
+    commandMap.put("/member/detail", new MemberDetailHandler(memberDao));
+    commandMap.put("/member/update", new MemberUpdateHandler(memberDao));
+    commandMap.put("/member/delete", new MemberDeleteHandler(memberDao));
 
-    MemberValidator memberValidator = new MemberValidator();
+    MemberValidator memberValidator = new MemberValidator(memberDao);
 
     commandMap.put("/project/add", new ProjectAddHandler(memberValidator));
     commandMap.put("/project/list", new ProjectListHandler());
     commandMap.put("/project/detail", new ProjectDetailHandler());
-    commandMap.put("/project/delete", new ProjectDeleteHandler());
     commandMap.put("/project/update", new ProjectUpdateHandler(memberValidator));
+    commandMap.put("/project/delete", new ProjectDeleteHandler());
 
     commandMap.put("/task/add", new TaskAddHandler(memberValidator));
     commandMap.put("/task/list", new TaskListHandler());
@@ -101,7 +101,7 @@ public class ClientApp {
             case "history":
               printCommandHistory(commandStack.iterator());
               break;
-            case "history2": 
+            case "history2":
               printCommandHistory(commandQueue.iterator());
               break;
             case "quit":
