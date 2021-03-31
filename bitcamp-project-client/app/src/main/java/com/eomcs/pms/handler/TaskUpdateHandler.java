@@ -1,19 +1,24 @@
 package com.eomcs.pms.handler;
 
+import com.eomcs.pms.dao.ProjectDao;
 import com.eomcs.pms.dao.TaskDao;
+import com.eomcs.pms.domain.Project;
 import com.eomcs.pms.domain.Task;
 import com.eomcs.util.Prompt;
 
+import java.util.List;
+
 public class TaskUpdateHandler implements Command {
 
-  TaskDao taskDao;
   MemberValidator memberValidator;
+  TaskDao taskDao;
+  ProjectDao projectDao;
 
-  public TaskUpdateHandler(MemberValidator memberValidator, TaskDao taskDao) {
-    this.taskDao = taskDao;
+  public TaskUpdateHandler(ProjectDao projectDao, TaskDao taskDao, MemberValidator memberValidator) {
+    this.projectDao = projectDao;
     this.memberValidator = memberValidator;
+    this.taskDao = taskDao;
   }
-
 
   @Override
   public void service() throws Exception {
@@ -22,11 +27,48 @@ public class TaskUpdateHandler implements Command {
     int no = Prompt.inputInt("번호? ");
 
     Task task = taskDao.findByNo(no);
-
     if (task == null) {
       System.out.println("해당 번호의 작업이 없습니다.");
       return;
     }
+
+    System.out.printf("현재 프로젝트: %s\n", task.getProjectTitle());
+
+    List<Project> projects = projectDao.findAll();
+    if (projects.size() == 0) {
+      System.out.println("현재 등록된 프로젝트가 없습니다.");
+      return;
+    }
+
+    for (Project p : projects) {
+      System.out.printf("  %d, %s\n", p.getNo(), p.getTitle());
+    }
+
+    int selectedProjectNo = 0;
+    loop:
+    while (true) {
+      try {
+        selectedProjectNo = Prompt.inputInt("변경할 프로젝트 번호?(취소: 0) ");
+        if (selectedProjectNo == 0) {
+          System.out.println("기존 프로젝트를 유지합니다.");
+          break loop;
+        }
+        for (Project p : projects) {
+          if (p.getNo() == selectedProjectNo) {
+            break loop;
+          }
+        }
+        System.out.println("유효하지 않은 프로젝트 번호 입니다.");
+
+      } catch (Exception e) {
+        System.out.println("숫자를 입력하세요!");
+      }
+    }
+    if (selectedProjectNo != 0) {
+      task.setProjectNo(selectedProjectNo);
+    }
+
+      // 2) 사용자에게서 변경할 데이터를 입력 받는다.
     task.setContent(Prompt.inputString(String.format("내용(%s)? ", task.getContent())));
     task.setDeadline(Prompt.inputDate(String.format("마감일(%s)? ", task.getDeadline())));
     task.setStatus(Prompt.inputInt(String.format(
@@ -46,7 +88,7 @@ public class TaskUpdateHandler implements Command {
       return;
     }
 
-    taskDao.updqte(task);
+    taskDao.update(task);
 
     System.out.println("작업을 변경하였습니다.");
   }

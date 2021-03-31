@@ -2,7 +2,6 @@ package com.eomcs.pms.dao;
 
 import com.eomcs.pms.domain.Member;
 import com.eomcs.pms.domain.Project;
-import com.eomcs.pms.handler.MemberValidator;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -88,7 +87,7 @@ public class ProjectDao {
         return list;
     }
 
-    public int delete(int no)throws Exception {
+    public int delete(int no) throws Exception {
         try (PreparedStatement stmt = con.prepareStatement(
                 "delete from pms_project where no=?")) {
 
@@ -103,49 +102,49 @@ public class ProjectDao {
             con.commit();
 
             return count;
-        }finally {
+        } finally {
             con.setAutoCommit(true);
         }
     }
 
-public Project findbyNo(int no)throws Exception {
-    try (PreparedStatement stmt = con.prepareStatement(
-            "select"
-                    + "    p.no,"
-                    + "    p.title,"
-                    + "    p.content,"
-                    + "    p.sdt,"
-                    + "    p.edt,"
-                    + "    m.no as owner_no,"
-                    + "    m.name as owner_name"
-                    + "  from pms_project p"
-                    + "    inner join pms_member m on p.owner=m.no"
-                    + " where p.no=?")) {
+    public Project findbyNo(int no) throws Exception {
+        try (PreparedStatement stmt = con.prepareStatement(
+                "select"
+                        + "    p.no,"
+                        + "    p.title,"
+                        + "    p.content,"
+                        + "    p.sdt,"
+                        + "    p.edt,"
+                        + "    m.no as owner_no,"
+                        + "    m.name as owner_name"
+                        + "  from pms_project p"
+                        + "    inner join pms_member m on p.owner=m.no"
+                        + " where p.no=?")) {
 
-        stmt.setInt(1, no);
+            stmt.setInt(1, no);
 
-        try (ResultSet rs = stmt.executeQuery()) {
-            if (!rs.next()) {
-                return null;
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (!rs.next()) {
+                    return null;
+                }
+
+                Project project = new Project();
+                project.setNo(rs.getInt("no"));
+                project.setTitle(rs.getString("title"));
+                project.setContent(rs.getString("content"));
+                project.setStartDate(rs.getDate("sdt"));
+                project.setEndDate(rs.getDate("edt"));
+
+                Member owner = new Member();
+                owner.setName(rs.getString("owner_name"));
+                project.setOwner(owner);
+
+                project.setMembers(findAllMembers(project.getNo()));
+
+                return project;
             }
-
-            Project project = new Project();
-            project.setNo(rs.getInt("no"));
-            project.setTitle(rs.getString("title"));
-            project.setContent(rs.getString("content"));
-            project.setStartDate(rs.getDate("sdt"));
-            project.setEndDate(rs.getDate("edt"));
-
-            Member owner = new Member();
-            owner.setName(rs.getString("owner_name"));
-            project.setOwner(owner);
-
-            project.setMembers(findAllMembers(project.getNo()));
-
-            return project;
         }
     }
-}
 
     public List<Project> findAll() throws Exception {
         ArrayList<Project> list = new ArrayList<>();
