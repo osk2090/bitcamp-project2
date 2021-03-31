@@ -71,9 +71,9 @@ public class ClientApp {
 
     commandMap.put("/task/add", new TaskAddHandler(projectDao, taskDao, memberValidator));
     commandMap.put("/task/list", new TaskListHandler(taskDao));
-    commandMap.put("/task/detail", new TaskDetailHandler());//
-    commandMap.put("/task/update", new TaskUpdateHandler(memberValidator));//
-    commandMap.put("/task/delete", new TaskDeleteHandler());//
+    commandMap.put("/task/detail", new TaskDetailHandler(taskDao));
+    commandMap.put("/task/update", new TaskUpdateHandler(memberValidator, taskDao));
+    commandMap.put("/task/delete", new TaskDeleteHandler(taskDao));
 
     try {
 
