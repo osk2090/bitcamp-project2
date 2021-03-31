@@ -6,12 +6,11 @@ public class Board {
   private int no;
   private String title;
   private String content;
-
   private Member writer;
-
   private Date registeredDate;
   private int viewCount;
   private int like;
+
   public Member getWriter() {
     return writer;
   }

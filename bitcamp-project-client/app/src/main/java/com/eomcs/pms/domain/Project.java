@@ -12,13 +12,36 @@ public class Project {
   private Member owner;
   private List<Member> members;
 
-  public Project() {}
-
   @Override
   public String toString() {
-    return "Project [no=" + no + ", title=" + title + ", content=" + content + ", startDate="
-            + startDate + ", endDate=" + endDate + ", owner=" + owner + ", members=" + members + "]";
+    return "Project{" +
+            "no=" + no +
+            ", title='" + title + '\'' +
+            ", content='" + content + '\'' +
+            ", startDate=" + startDate +
+            ", endDate=" + endDate +
+            ", owner=" + owner +
+            ", members=" + members +
+            '}';
   }
+
+  public Member getOwner() {
+    return owner;
+  }
+
+  public void setOwner(Member owner) {
+    this.owner = owner;
+  }
+
+  public List<Member> getMembers() {
+    return members;
+  }
+
+  public void setMembers(List<Member> members) {
+    this.members = members;
+  }
+
+  public Project() {}
 
   public int getNo() {
     return no;
@@ -49,17 +72,5 @@ public class Project {
   }
   public void setEndDate(Date endDate) {
     this.endDate = endDate;
-  }
-  public Member getOwner() {
-    return owner;
-  }
-  public void setOwner(Member owner) {
-    this.owner = owner;
-  }
-  public List<Member> getMembers() {
-    return members;
-  }
-  public void setMembers(List<Member> members) {
-    this.members = members;
   }
 }

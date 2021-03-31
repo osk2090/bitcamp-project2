@@ -1,14 +1,12 @@
 package com.eomcs.pms.handler;
 
-import com.eomcs.pms.dao.TaskDao;
 import com.eomcs.util.Prompt;
 
-public class TaskDeleteHandler implements Command {
-  TaskDao taskDao;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 
-  public TaskDeleteHandler(TaskDao taskDao) {
-    this.taskDao = taskDao;
-  }
+public class TaskDeleteHandler implements Command {
 
   @Override
   public void service() throws Exception {
@@ -22,10 +20,17 @@ public class TaskDeleteHandler implements Command {
       return;
     }
 
-    if (taskDao.delete(no) == 0) {
-      System.out.println("해당 번호의 작업이 없습니다.");
-    } else {
-      System.out.println("작업을 삭제하였습니다.");
+    try (Connection con = DriverManager.getConnection(
+        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
+        PreparedStatement stmt = con.prepareStatement(
+            "delete from pms_task where no=?")) {
+
+      stmt.setInt(1, no);
+      if (stmt.executeUpdate() == 0) {
+        System.out.println("해당 번호의 작업이 없습니다.");
+      } else {
+        System.out.println("작업을 삭제하였습니다.");
+      }
     }
   }
 }
