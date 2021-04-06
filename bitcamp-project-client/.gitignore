@@ -6,3 +6,4 @@ build
 .classpath
 bin/
 .settings/
+AppTest.java

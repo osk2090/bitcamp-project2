@@ -1,11 +1,5 @@
 package com.eomcs.pms;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.util.ArrayDeque;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
 import com.eomcs.pms.dao.BoardDao;
 import com.eomcs.pms.dao.MemberDao;
 import com.eomcs.pms.dao.ProjectDao;
@@ -14,30 +8,20 @@ import com.eomcs.pms.dao.mariadb.BoardDaoImpl;
 import com.eomcs.pms.dao.mariadb.MemberDaoImpl;
 import com.eomcs.pms.dao.mariadb.ProjectDaoImpl;
 import com.eomcs.pms.dao.mariadb.TaskDaoImpl;
-import com.eomcs.pms.handler.BoardAddHandler;
-import com.eomcs.pms.handler.BoardDeleteHandler;
-import com.eomcs.pms.handler.BoardDetailHandler;
-import com.eomcs.pms.handler.BoardListHandler;
-import com.eomcs.pms.handler.BoardSearchHandler;
-import com.eomcs.pms.handler.BoardUpdateHandler;
-import com.eomcs.pms.handler.Command;
-import com.eomcs.pms.handler.MemberAddHandler;
-import com.eomcs.pms.handler.MemberDeleteHandler;
-import com.eomcs.pms.handler.MemberDetailHandler;
-import com.eomcs.pms.handler.MemberListHandler;
-import com.eomcs.pms.handler.MemberUpdateHandler;
-import com.eomcs.pms.handler.MemberValidator;
-import com.eomcs.pms.handler.ProjectAddHandler;
-import com.eomcs.pms.handler.ProjectDeleteHandler;
-import com.eomcs.pms.handler.ProjectDetailHandler;
-import com.eomcs.pms.handler.ProjectListHandler;
-import com.eomcs.pms.handler.ProjectUpdateHandler;
-import com.eomcs.pms.handler.TaskAddHandler;
-import com.eomcs.pms.handler.TaskDeleteHandler;
-import com.eomcs.pms.handler.TaskDetailHandler;
-import com.eomcs.pms.handler.TaskListHandler;
-import com.eomcs.pms.handler.TaskUpdateHandler;
+import com.eomcs.pms.handler.*;
 import com.eomcs.util.Prompt;
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+
+import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.util.ArrayDeque;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
 
 public class ClientApp {
 
@@ -67,13 +51,25 @@ public class ClientApp {
 
   public void execute() throws Exception {
 
+    // Mybatis 설정 파일을 읽을 입력 스트림 객체 준비
+    InputStream mybatisConfigStream = Resources.getResourceAsStream(
+            "com/eomcs/pms/conf/mybatis-config.xml");
+
+    // SqlSessionFactory 객체 준비
+    SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(mybatisConfigStream);
+
+    // DAO가 사용할 SqlSession 객체 준비
+    // => 단 auto commit 으로 동작하는 SqlSession 객체를 준비한다.
+    SqlSession sqlSession = sqlSessionFactory.openSession(true);
+
     // DB Connection 객체 생성
     Connection con = DriverManager.getConnection(
-        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
+            "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
 
     // 핸들러가 사용할 DAO 객체 준비
-    BoardDao boardDao = new BoardDaoImpl(con);
-    MemberDao memberDao = new MemberDaoImpl(con);
+    BoardDao boardDao = new BoardDaoImpl(sqlSession);
+    MemberDao memberDao = new MemberDaoImpl(sqlSession);
+
     ProjectDao projectDao = new ProjectDaoImpl(con);
     TaskDao taskDao = new TaskDaoImpl(con);
 
