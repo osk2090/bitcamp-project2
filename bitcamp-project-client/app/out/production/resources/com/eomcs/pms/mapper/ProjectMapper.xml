@@ -23,6 +23,32 @@
         </collection>
     </resultMap>
 
+
+
+
+
+
+    <sql id="select1">
+        select
+            p.no,
+            p.title,
+            p.sdt,
+            p.edt,
+            m.no as owner_no,
+            m.name as owner_name,
+            m2.no as member_no,
+            m2.name as member_name
+        from pms_project p
+                 inner join pms_member m on p.owner=m.no
+                 left outer join pms_member_project mp on mp.project_no=p.no
+                 left outer join pms_member m2 on mp.member_no=m2.no
+    </sql>
+
+
+
+
+
+
     <insert id="insert" parameterType="project"
             useGeneratedKeys="true" keyColumn="no" keyProperty="no">
         insert into pms_project(title,content,sdt,edt,owner)
@@ -54,45 +80,27 @@
      -->
 
     <select id="findByKeyword" resultMap="projectMap" parameterType="map">
-        select
-        p.no,
-        p.title,
-        p.sdt,
-        p.edt,
-        m.no as owner_no,
-        m.name as owner_name,
-        m2.no as member_no,
-        m2.name as member_name
-        from pms_project p
-        inner join pms_member m on p.owner=m.no
-        left outer join pms_member_project mp on mp.project_no=p.no
-        left outer join pms_member m2 on mp.member_no=m2.no
-        <if test="item == 1">
-            where p.title like concat('%', #{keyword}, '%')
-        </if>
-        <if test="item == 2">
-            where m.name like concat('%', #{keyword}, '%')
-        </if>
-        <if test="item == 3">
-            where m2.name like concat('%', #{keyword}, '%')
-        </if>
+        <include refid="select1"/>
+        <where>
+            <choose>
+                <when test="title != ''">
+                    where p.title like concat('%', #{title}, '%')
+                </when>
+                <when test="owner != ''">
+                    where m.name = #{owner}
+                </when>
+                <when test="member != ''">
+                    where m2.name = #{member}
+                </when>
+            </choose>
+        </where>
         order by title asc
     </select>
 
+
+
     <select id="findByKeywords" resultMap="projectMap" parameterType="map">
-        select
-        p.no,
-        p.title,
-        p.sdt,
-        p.edt,
-        m.no as owner_no,
-        m.name as owner_name,
-        m2.no as member_no,
-        m2.name as member_name
-        from pms_project p
-        inner join pms_member m on p.owner=m.no
-        left outer join pms_member_project mp on mp.project_no=p.no
-        left outer join pms_member m2 on mp.member_no=m2.no
+        <include refid="select1"/>
         <where>
             <if test="title != ''">
                 p.title like concat('%', #{title}, '%')
@@ -106,6 +114,8 @@
         </where>
         order by title asc
     </select>
+
+
 
     <select id="findByNo" resultMap="projectMap" parameterType="int">
         select
@@ -140,11 +150,20 @@
         where no=#{value}
     </delete>
 
-
     <insert id="insertMember" parameterType="map">
         insert into pms_member_project(member_no,project_no)
         values(#{memberNo}, #{projectNo})
     </insert>
+
+
+    <insert id="insertMembers" parameterType="map">
+        insert into pms_member_project(member_no,project_no)
+        values
+        <foreach collection="members" item="m" separator=",">
+            (#{m.no}, #{projectNo})
+        </foreach>
+    </insert>
+
 
     <delete id="deleteMembers" parameterType="int">
         delete from pms_member_project
