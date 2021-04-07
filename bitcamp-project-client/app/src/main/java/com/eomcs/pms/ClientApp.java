@@ -53,7 +53,7 @@ public class ClientApp {
 
     // Mybatis 설정 파일을 읽을 입력 스트림 객체 준비
     InputStream mybatisConfigStream = Resources.getResourceAsStream(
-            "com/eomcs/pms/conf/mybatis-config.xml");
+        "com/eomcs/pms/conf/mybatis-config.xml");
 
     // SqlSessionFactory 객체 준비
     SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(mybatisConfigStream);
@@ -64,17 +64,16 @@ public class ClientApp {
 
     // DB Connection 객체 생성
     Connection con = DriverManager.getConnection(
-            "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
+        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
 
     // 핸들러가 사용할 DAO 객체 준비
     BoardDao boardDao = new BoardDaoImpl(sqlSession);
     MemberDao memberDao = new MemberDaoImpl(sqlSession);
-
-    ProjectDao projectDao = new ProjectDaoImpl(con);
-    TaskDao taskDao = new TaskDaoImpl(con);
+    TaskDao taskDao = new TaskDaoImpl(sqlSession);
+    ProjectDao projectDao = new ProjectDaoImpl(sqlSession);
 
     // 사용자 명령을 처리하는 객체를 맵에 보관한다.
-    HashMap<String,Command> commandMap = new HashMap<>();
+    HashMap<String, Command> commandMap = new HashMap<>();
 
     commandMap.put("/board/add", new BoardAddHandler(boardDao));
     commandMap.put("/board/list", new BoardListHandler(boardDao));
