@@ -95,6 +95,8 @@ public class ClientApp {
     commandMap.put("/project/detail", new ProjectDetailHandler(projectDao));
     commandMap.put("/project/update", new ProjectUpdateHandler(projectDao, memberValidator));
     commandMap.put("/project/delete", new ProjectDeleteHandler(projectDao, taskDao));
+    commandMap.put("/project/search", new ProjectSearchHandler(projectDao));
+    commandMap.put("/project/detailSearch", new ProjectDetailSearchHandler(projectDao));
 
     commandMap.put("/task/add", new TaskAddHandler(taskDao, projectDao, memberValidator));
     commandMap.put("/task/list", new TaskListHandler(taskDao));

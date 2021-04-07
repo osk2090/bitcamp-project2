@@ -1,11 +1,12 @@
 package com.eomcs.pms.handler;
 
-import java.util.List;
 import com.eomcs.pms.dao.ProjectDao;
 import com.eomcs.pms.dao.TaskDao;
 import com.eomcs.pms.domain.Project;
 import com.eomcs.pms.domain.Task;
 import com.eomcs.util.Prompt;
+
+import java.util.List;
 
 public class TaskAddHandler implements Command {
 
@@ -24,7 +25,7 @@ public class TaskAddHandler implements Command {
     System.out.println("[작업 등록]");
 
     // 1) 현재 등록된 프로젝트 목록을 가져온다.
-    List<Project> projects = projectDao.findAll();
+    List<Project> projects = projectDao.findByKeyword(null, null);
 
 
     // 2) 프로젝트 목록을 출력한다.

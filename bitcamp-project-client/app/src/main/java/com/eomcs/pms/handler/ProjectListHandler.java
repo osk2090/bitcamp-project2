@@ -1,9 +1,10 @@
 package com.eomcs.pms.handler;
 
-import java.util.List;
 import com.eomcs.pms.dao.ProjectDao;
 import com.eomcs.pms.domain.Member;
 import com.eomcs.pms.domain.Project;
+
+import java.util.List;
 
 public class ProjectListHandler implements Command {
 
@@ -17,7 +18,7 @@ public class ProjectListHandler implements Command {
   public void service() throws Exception {
     System.out.println("[프로젝트 목록]");
 
-    List<Project> projects = projectDao.findAll();
+    List<Project> projects = projectDao.findByKeyword(null, null);
 
     for (Project p : projects) {
 

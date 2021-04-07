@@ -1,14 +1,13 @@
 package com.eomcs.pms.dao;
 
-import java.util.List;
 import com.eomcs.pms.domain.Member;
 import com.eomcs.pms.domain.Project;
+
+import java.util.List;
 
 public interface ProjectDao {
 
   int insert(Project project) throws Exception;
-
-  List<Project> findAll() throws Exception;
 
   Project findByNo(int no) throws Exception;
 
@@ -21,6 +20,10 @@ public interface ProjectDao {
   List<Member> findAllMembers(int projectNo) throws Exception;
 
   int deleteMembers(int projectNo) throws Exception;
+
+  List<Project> findByKeyword(String item, String keyword) throws Exception;
+
+  List<Project> findByKeywords(String title, String owner, String member) throws Exception;
 }
 
 

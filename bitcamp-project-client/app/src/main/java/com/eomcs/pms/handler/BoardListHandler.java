@@ -1,8 +1,9 @@
 package com.eomcs.pms.handler;
 
-import java.util.List;
 import com.eomcs.pms.dao.BoardDao;
 import com.eomcs.pms.domain.Board;
+
+import java.util.List;
 
 public class BoardListHandler implements Command {
 
@@ -20,7 +21,7 @@ public class BoardListHandler implements Command {
   public void service() throws Exception {
     System.out.println("[게시글 목록]");
 
-    List<Board> boards = boardDao.findAll();
+    List<Board> boards = boardDao.findByKeyword(null);
 
     for (Board b : boards) {
       System.out.printf("%d, %s, %s, %s, %d\n", 

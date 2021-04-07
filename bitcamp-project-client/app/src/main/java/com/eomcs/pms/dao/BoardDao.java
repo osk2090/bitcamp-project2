@@ -1,14 +1,15 @@
 package com.eomcs.pms.dao;
 
-import java.util.List;
 import com.eomcs.pms.domain.Board;
+
+import java.util.List;
 
 // BoardDao 의 규칙 정의
 public interface BoardDao {
 
   int insert(Board board) throws Exception;
 
-  List<Board> findAll() throws Exception;
+  List<Board> findByKeyword(String keyword) throws Exception;
 
   Board findByNo(int no) throws Exception;
 
@@ -18,7 +19,6 @@ public interface BoardDao {
 
   int delete(int no) throws Exception;
 
-  List<Board> findByKeyword(String keyword) throws Exception;
 }
 
 

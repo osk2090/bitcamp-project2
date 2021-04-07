@@ -1,11 +1,12 @@
 package com.eomcs.pms.handler;
 
-import java.util.List;
 import com.eomcs.pms.dao.ProjectDao;
 import com.eomcs.pms.dao.TaskDao;
 import com.eomcs.pms.domain.Project;
 import com.eomcs.pms.domain.Task;
 import com.eomcs.util.Prompt;
+
+import java.util.List;
 
 public class TaskUpdateHandler implements Command {
 
@@ -34,7 +35,7 @@ public class TaskUpdateHandler implements Command {
 
     System.out.printf("현재 프로젝트: %s\n", task.getProjectTitle());
 
-    List<Project> projects = projectDao.findAll();
+    List<Project> projects = projectDao.findByKeyword(null, null);
     System.out.println("프로젝트들:");
     if (projects.size() == 0) {
       System.out.println("현재 등록된 프로젝트가 없습니다!");
