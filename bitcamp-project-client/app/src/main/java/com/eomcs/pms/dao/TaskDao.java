@@ -1,7 +1,8 @@
 package com.eomcs.pms.dao;
 
-import java.util.List;
 import com.eomcs.pms.domain.Task;
+
+import java.util.List;
 
 public interface TaskDao {
 
@@ -16,6 +17,8 @@ public interface TaskDao {
   int update(Task task) throws Exception;
 
   int delete(int no) throws Exception;
+
+  int deleteByProjectNo(int projectNo) throws Exception;
 }
 
 

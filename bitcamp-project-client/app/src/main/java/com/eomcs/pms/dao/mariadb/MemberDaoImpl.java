@@ -10,7 +10,7 @@ public class MemberDaoImpl implements MemberDao {
 
   SqlSession sqlSession;
 
-  public MemberDaoImpl(SqlSession sqlSession) {
+  public MemberDaoImpl(SqlSession sqlSession) throws Exception {
     this.sqlSession = sqlSession;
   }
 
@@ -41,17 +41,13 @@ public class MemberDaoImpl implements MemberDao {
 
   @Override
   public Member findByName(String name) throws Exception {
-    return sqlSession.selectOne("MemberMapper.findByName", name);
+    List<Member> members = sqlSession.selectList("MemberMapper.findByName", name);
+    if (members.size() == 0) {
+      return null;
+    }
+    return members.get(0);
   }
 }
-
-
-
-
-
-
-
-
 
 
 

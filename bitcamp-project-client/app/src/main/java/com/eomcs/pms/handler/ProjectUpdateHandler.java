@@ -30,21 +30,21 @@ public class ProjectUpdateHandler implements Command {
       return;
     }
 
+    // 사용자에게서 변경할 데이터를 입력 받는다.
     Project project = new Project();
     project.setNo(no);
-    // 사용자에게서 변경할 데이터를 입력 받는다.
-    oldProject.setTitle(Prompt.inputString(
-        String.format("프로젝트명(%s)? ", oldProject.getTitle())));
-    oldProject.setContent(Prompt.inputString(
-        String.format("내용(%s)? ", oldProject.getContent())));
-    oldProject.setStartDate(Prompt.inputDate(
-        String.format("시작일(%s)? ", oldProject.getStartDate())));
-    oldProject.setEndDate(Prompt.inputDate(
-        String.format("종료일(%s)? ", oldProject.getEndDate())));
-    oldProject.setOwner(memberValidator.inputMember(
-        String.format("만든이(%s)?(취소: 빈 문자열) ", oldProject.getOwner().getName())));
+    project.setTitle(Prompt.inputString(
+            String.format("프로젝트명(%s)? ", oldProject.getTitle())));
+    project.setContent(Prompt.inputString(
+            String.format("내용(%s)? ", oldProject.getContent())));
+    project.setStartDate(Prompt.inputDate(
+            String.format("시작일(%s)? ", oldProject.getStartDate())));
+    project.setEndDate(Prompt.inputDate(
+            String.format("종료일(%s)? ", oldProject.getEndDate())));
+    project.setOwner(memberValidator.inputMember(
+            String.format("만든이(%s)?(취소: 빈 문자열) ", oldProject.getOwner().getName())));
 
-    if (oldProject.getOwner() == null) {
+    if (project.getOwner() == null) {
       System.out.println("프로젝트 변경을 취소합니다.");
       return;
     }
@@ -60,7 +60,7 @@ public class ProjectUpdateHandler implements Command {
     }
 
     project.setMembers(memberValidator.inputMembers(
-        String.format("팀원(%s)?(완료: 빈 문자열) ", strBuilder)));
+            String.format("팀원(%s)?(완료: 빈 문자열) ", strBuilder)));
 
     String input = Prompt.inputString("정말 변경하시겠습니까?(y/N) ");
     if (!input.equalsIgnoreCase("Y")) {
@@ -69,11 +69,13 @@ public class ProjectUpdateHandler implements Command {
     }
 
     // DBMS에게 프로젝트 변경을 요청한다.
-    projectDao.update(oldProject);
+    projectDao.update(project);
 
     System.out.println("프로젝트을 변경하였습니다.");
   }
 }
+
+
 
 
 

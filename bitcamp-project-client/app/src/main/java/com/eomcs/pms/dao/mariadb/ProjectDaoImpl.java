@@ -12,16 +12,16 @@ public class ProjectDaoImpl implements ProjectDao {
 
   SqlSession sqlSession;
 
-  public ProjectDaoImpl(SqlSession sqlSession) {
+  public ProjectDaoImpl(SqlSession sqlSession) throws Exception {
     this.sqlSession = sqlSession;
   }
 
   @Override
   public int insert(Project project) throws Exception {
-    //1.프로젝트 정보를 입력한다
+    // 1) 프로젝트 정보를 입력한다.
     int count = sqlSession.insert("ProjectMapper.insert", project);
 
-    //2.프로젝트의 팀원 정보를 입력한다
+    // 2) 프로젝트의 팀원 정보를 입력한다.
     for (Member member : project.getMembers()) {
       insertMember(project.getNo(), member.getNo());
     }
@@ -31,47 +31,56 @@ public class ProjectDaoImpl implements ProjectDao {
 
   @Override
   public List<Project> findAll() throws Exception {
-    List<Project> projects = sqlSession.selectList("ProjectMapper.findAll");
-    for (Project p : projects) {
-      p.setMembers(findAllMembers(p.getNo()));
-    }
-    return projects;
+    // 1) 프로젝트 정보를 가져올 때 멤버 목록도 함께 가져오기
+    return sqlSession.selectList("ProjectMapper.findAll");
+
+    // 2) 프로젝트의 멤버 목록을 따로 가져오기
+    //    List<Project> projects = sqlSession.selectList("ProjectMapper.findAll");
+    //    for (Project p : projects) {
+    //      p.setMembers(findAllMembers(p.getNo()));
+    //    }
+    //    return projects;
   }
 
   @Override
   public Project findByNo(int no) throws Exception {
-    Project project = sqlSession.selectOne("ProjectMapper.findByNo", no);
-    project.setMembers(findAllMembers(no));
-    return project;
+    // 1) 프로젝트 정보를 가져올 때 멤버 목록도 함께 가져오기
+    return sqlSession.selectOne("ProjectMapper.findByNo", no);
+
+    // 2) 프로젝트의 멤버 목록을 따로 가져오기
+    //    Project project = sqlSession.selectOne("ProjectMapper.findByNo", no);
+    //    project.setMembers(findAllMembers(no));
+    //    return project;
   }
 
   @Override
   public int update(Project project) throws Exception {
-    //1.프로젝트 정보를 변경한다
+    // 1) 프로젝트 정보를 변경한다.
     int count = sqlSession.update("ProjectMapper.update", project);
 
-    //2.프로젝트의 기존 멤버를 모두 삭제한다
+    // 2) 프로젝트의 기존 멤버를 모두 삭제한다.
     deleteMembers(project.getNo());
 
-    //3.프로젝트 멤버를 추가한다
+    // 3) 프로젝트 멤버를 추가한다.
     for (Member member : project.getMembers()) {
       insertMember(project.getNo(), member.getNo());
     }
+
     return count;
   }
 
   @Override
   public int delete(int no) throws Exception {
-    //1.프로젝트에 소속된 팀원 정보 삭제
-    deleteMembers(no);//자식테이블의 데이터을 먼저 삭제해야지 부모테이블의 데이터를 삭제가능
+    // 1) 프로젝트에 소속된 팀원 정보 삭제
+    deleteMembers(no);
 
-    //2.프로젝트 삭제
+    // 2) 프로젝트 삭제
     return sqlSession.delete("ProjectMapper.delete", no);
   }
 
   @Override
   public int insertMember(int projectNo, int memberNo) throws Exception {
-    HashMap<String, Object> params = new HashMap<>();
+    HashMap<String,Object> params = new HashMap<>();
     params.put("projectNo", projectNo);
     params.put("memberNo", memberNo);
     return sqlSession.insert("ProjectMapper.insertMember", params);
@@ -87,3 +96,15 @@ public class ProjectDaoImpl implements ProjectDao {
     return sqlSession.delete("ProjectMapper.deleteMembers", projectNo);
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
