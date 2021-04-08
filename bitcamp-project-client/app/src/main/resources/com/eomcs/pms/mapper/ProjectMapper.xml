@@ -23,11 +23,6 @@
         </collection>
     </resultMap>
 
-
-
-
-
-
     <sql id="select1">
         select
             p.no,
@@ -43,10 +38,6 @@
                  left outer join pms_member_project mp on mp.project_no=p.no
                  left outer join pms_member m2 on mp.member_no=m2.no
     </sql>
-
-
-
-
 
 
     <insert id="insert" parameterType="project"
@@ -83,21 +74,19 @@
         <include refid="select1"/>
         <where>
             <choose>
-                <when test="title != ''">
-                    where p.title like concat('%', #{title}, '%')
+                <when test="item == 1">
+                    p.title like concat('%', #{keyword}, '%')
                 </when>
-                <when test="owner != ''">
-                    where m.name = #{owner}
+                <when test="item == 2">
+                    m.name like concat('%', #{keyword}, '%')
                 </when>
-                <when test="member != ''">
-                    where m2.name = #{member}
+                <when test="item == 3">
+                    m2.name like concat('%', #{keyword}, '%')
                 </when>
             </choose>
         </where>
         order by title asc
     </select>
-
-
 
     <select id="findByKeywords" resultMap="projectMap" parameterType="map">
         <include refid="select1"/>
@@ -114,8 +103,6 @@
         </where>
         order by title asc
     </select>
-
-
 
     <select id="findByNo" resultMap="projectMap" parameterType="int">
         select
@@ -150,11 +137,11 @@
         where no=#{value}
     </delete>
 
+
     <insert id="insertMember" parameterType="map">
         insert into pms_member_project(member_no,project_no)
         values(#{memberNo}, #{projectNo})
     </insert>
-
 
     <insert id="insertMembers" parameterType="map">
         insert into pms_member_project(member_no,project_no)
@@ -163,7 +150,6 @@
             (#{m.no}, #{projectNo})
         </foreach>
     </insert>
-
 
     <delete id="deleteMembers" parameterType="int">
         delete from pms_member_project

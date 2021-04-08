@@ -18,17 +18,4 @@ public interface BoardDao {
   int updateViewCount(int no) throws Exception;
 
   int delete(int no) throws Exception;
-
 }
-
-
-
-
-
-
-
-
-
-
-
-

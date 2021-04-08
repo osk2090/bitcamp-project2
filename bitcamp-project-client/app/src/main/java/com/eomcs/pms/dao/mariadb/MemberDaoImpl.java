@@ -10,7 +10,7 @@ public class MemberDaoImpl implements MemberDao {
 
   SqlSession sqlSession;
 
-  public MemberDaoImpl(SqlSession sqlSession) throws Exception {
+  public MemberDaoImpl(SqlSession sqlSession) {
     this.sqlSession = sqlSession;
   }
 
@@ -22,6 +22,11 @@ public class MemberDaoImpl implements MemberDao {
   @Override
   public List<Member> findAll() throws Exception {
     return sqlSession.selectList("MemberMapper.findAll");
+  }
+
+  @Override
+  public Member findByName(String name) throws Exception {
+    return (Member) sqlSession.selectList("MemberMapper.findByName", name);
   }
 
   @Override
@@ -38,17 +43,4 @@ public class MemberDaoImpl implements MemberDao {
   public int delete(int no) throws Exception {
     return sqlSession.delete("MemberMapper.delete", no);
   }
-
-  @Override
-  public Member findByName(String name) throws Exception {
-    List<Member> members = sqlSession.selectList("MemberMapper.findByName", name);
-    if (members.size() == 0) {
-      return null;
-    }
-    return members.get(0);
-  }
 }
-
-
-
-

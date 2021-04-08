@@ -4,7 +4,6 @@
   "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 
-
   <properties resource="com/eomcs/pms/conf/jdbc.properties"></properties>
 
   <typeAliases>
@@ -26,7 +25,16 @@
   <mappers>
     <mapper resource="com/eomcs/pms/mapper/BoardMapper.xml"/>
     <mapper resource="com/eomcs/pms/mapper/MemberMapper.xml"/>
-    <mapper resource="com/eomcs/pms/mapper/TaskMapper.xml"/>
     <mapper resource="com/eomcs/pms/mapper/ProjectMapper.xml"/>
+    <mapper resource="com/eomcs/pms/mapper/TaskMapper.xml"/>
+
   </mappers>
 </configuration>
+
+
+
+
+
+
+
+

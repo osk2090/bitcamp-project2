@@ -8,7 +8,6 @@ import java.util.List;
 
 public class BoardDaoImpl implements BoardDao {
 
-  // auto commit 객체 받기
   SqlSession sqlSession;
 
   public BoardDaoImpl(SqlSession sqlSession) throws Exception {
@@ -44,26 +43,4 @@ public class BoardDaoImpl implements BoardDao {
   public List<Board> findByKeyword(String keyword) throws Exception {
     return sqlSession.selectList("BoardMapper.findByKeyword", keyword);
   }
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
