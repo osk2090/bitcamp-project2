@@ -20,7 +20,7 @@ public class MemberUpdateHandler implements Command {
 
     int no = Prompt.inputInt("번호? ");
 
-    Member member = memberService.detail(no);
+    Member member = memberService.get(no);
 
     if (member == null) {
       System.out.println("해당 번호의 회원이 없습니다.");

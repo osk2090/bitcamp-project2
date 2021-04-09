@@ -18,7 +18,7 @@ public class ProjectListHandler implements Command {
   public void service() throws Exception {
     System.out.println("[프로젝트 목록]");
 
-    List<Project> projects = projectService.findByKeyword(null, null);
+    List<Project> projects = projectService.list();
 
     for (Project p : projects) {
 

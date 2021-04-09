@@ -21,7 +21,7 @@ public class ProjectDetailHandler implements Command {
 
     int no = Prompt.inputInt("번호? ");
 
-    Project project = projectService.findByNo(no);
+    Project project = projectService.get(no);
 
     if (project == null) {
       System.out.println("해당 번호의 프로젝트가 없습니다.");

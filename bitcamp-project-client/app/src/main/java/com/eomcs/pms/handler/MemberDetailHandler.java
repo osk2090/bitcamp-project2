@@ -21,7 +21,7 @@ public class MemberDetailHandler implements Command {
 
     int no = Prompt.inputInt("번호? ");
 
-    Member m = memberService.detail(no);
+    Member m = memberService.get(no);
 
     if (m == null) {
       System.out.println("해당 번호의 회원이 없습니다.");

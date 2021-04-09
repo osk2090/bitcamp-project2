@@ -27,7 +27,7 @@ public class ProjectSearchHandler implements Command {
       keyword = Prompt.inputString("검색어? ");
     }
 
-    List<Project> projects = projectService.findByKeyword(item, keyword);
+    List<Project> projects = projectService.search(item, keyword);
 
     for (Project p : projects) {
 

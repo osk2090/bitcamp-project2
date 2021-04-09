@@ -4,19 +4,21 @@ import com.eomcs.pms.dao.ProjectDao;
 import com.eomcs.pms.dao.TaskDao;
 import com.eomcs.pms.domain.Project;
 import com.eomcs.pms.domain.Task;
+import com.eomcs.pms.service.ProjectService;
+import com.eomcs.pms.service.TaskService;
 import com.eomcs.util.Prompt;
 
 import java.util.List;
 
 public class TaskUpdateHandler implements Command {
 
-  TaskDao taskDao;
-  ProjectDao projectDao;
+  TaskService taskService;
+  ProjectService projectService;
   MemberValidator memberValidator;
 
-  public TaskUpdateHandler(TaskDao taskDao, ProjectDao projectDao, MemberValidator memberValidator) {
-    this.taskDao = taskDao;
-    this.projectDao = projectDao;
+  public TaskUpdateHandler(TaskService taskService, ProjectService taskService, MemberValidator memberValidator) {
+    this.taskService = taskService;
+    this.projectService = projectService;
     this.memberValidator = memberValidator;
   }
 
@@ -27,7 +29,7 @@ public class TaskUpdateHandler implements Command {
 
     int no = Prompt.inputInt("번호? ");
 
-    Task oldTask = taskDao.findByNo(no);
+    Task oldTask = taskService.detail(no);
     if (oldTask == null) {
       System.out.println("해당 번호의 작업이 없습니다.");
       return;
@@ -35,7 +37,7 @@ public class TaskUpdateHandler implements Command {
 
     System.out.printf("현재 프로젝트: %s\n", oldTask.getProjectTitle());
 
-    List<Project> projects = projectDao.findByKeyword(null, null);
+    List<Project> projects = taskService.search(no);
     System.out.println("프로젝트들:");
     if (projects.size() == 0) {
       System.out.println("현재 등록된 프로젝트가 없습니다!");
@@ -94,7 +96,7 @@ public class TaskUpdateHandler implements Command {
     }
 
     // DBMS에게 게시글 변경을 요청한다.
-    taskDao.update(task);
+    taskService.update(task);
 
     System.out.println("작업을 변경하였습니다.");
   }

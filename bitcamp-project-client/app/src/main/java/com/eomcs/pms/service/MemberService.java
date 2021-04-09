@@ -37,14 +37,11 @@ public class MemberService {
     }
 
     //멤버 상세 조회 업무
-    public Member detail(int no)throws Exception {
-        Member member = memberDao.findByNo(no);
-        if (member != null) {
-            sqlSession.commit();
-        }
-        return member;
+    public Member get(int no)throws Exception {
+        return memberDao.findByNo(no);
     }
 
+    //이름으로 찾기
     public Member search(String name) throws Exception {
         return memberDao.findByName(name);
     }

@@ -56,6 +56,4 @@ public class TaskDaoImpl implements TaskDao {
     sqlSession.commit();
     return count;
   }
-
-
 }

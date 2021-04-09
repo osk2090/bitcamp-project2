@@ -78,7 +78,7 @@ public class ClientApp {
 
     BoardService boardService = new BoardService(sqlSession, boardDao);
     MemberService memberService = new MemberService(sqlSession, memberDao);
-    ProjectService projectService = new ProjectService(sqlSession, projectDao);
+    ProjectService projectService = new ProjectService(sqlSession, projectDao, taskDao);
 
 
     // 사용자 명령을 처리하는 객체를 맵에 보관한다.
@@ -105,7 +105,7 @@ public class ClientApp {
     commandMap.put("/project/update", new ProjectUpdateHandler(projectService, memberValidator));
     commandMap.put("/project/memberUpdate", new ProjectMemberUpdateHandler(projectService, memberValidator));
     commandMap.put("/project/memberDelete", new ProjectMemberDeleteHandler(projectService));
-    commandMap.put("/project/delete", new ProjectDeleteHandler(projectService, taskDao));
+    commandMap.put("/project/delete", new ProjectDeleteHandler(projectService));
     commandMap.put("/project/search", new ProjectSearchHandler(projectService));
     commandMap.put("/project/detailSearch", new ProjectDetailSearchHandler(projectService));
 
