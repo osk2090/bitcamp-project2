@@ -1,7 +1,5 @@
 package com.eomcs.pms.handler;
 
-import com.eomcs.pms.dao.ProjectDao;
-import com.eomcs.pms.dao.TaskDao;
 import com.eomcs.pms.domain.Project;
 import com.eomcs.pms.domain.Task;
 import com.eomcs.pms.service.ProjectService;
@@ -16,7 +14,7 @@ public class TaskUpdateHandler implements Command {
   ProjectService projectService;
   MemberValidator memberValidator;
 
-  public TaskUpdateHandler(TaskService taskService, ProjectService taskService, MemberValidator memberValidator) {
+  public TaskUpdateHandler(TaskService taskService, ProjectService projectService, MemberValidator memberValidator) {
     this.taskService = taskService;
     this.projectService = projectService;
     this.memberValidator = memberValidator;
@@ -37,7 +35,7 @@ public class TaskUpdateHandler implements Command {
 
     System.out.printf("현재 프로젝트: %s\n", oldTask.getProjectTitle());
 
-    List<Project> projects = taskService.search(no);
+    List<Project> projects = projectService.list();
     System.out.println("프로젝트들:");
     if (projects.size() == 0) {
       System.out.println("현재 등록된 프로젝트가 없습니다!");

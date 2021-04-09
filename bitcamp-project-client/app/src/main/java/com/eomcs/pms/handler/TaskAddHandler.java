@@ -25,7 +25,7 @@ public class TaskAddHandler implements Command {
     System.out.println("[작업 등록]");
 
     // 1) 현재 등록된 프로젝트 목록을 가져온다.
-    List<Project> projects = projectService.findByKeyword(null, null);
+    List<Project> projects = projectService.list();
 
 
     // 2) 프로젝트 목록을 출력한다.
