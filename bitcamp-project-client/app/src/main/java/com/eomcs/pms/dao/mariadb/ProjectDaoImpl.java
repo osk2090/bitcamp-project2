@@ -18,7 +18,16 @@ public class ProjectDaoImpl implements ProjectDao {
 
   @Override
   public int insert(Project project) throws Exception {
-    return sqlSession.insert("ProjectMapper.insert", project);
+    // 1) 프로젝트 정보를 입력한다.
+    int count = sqlSession.insert("ProjectMapper.insert", project);
+
+    // 2) 프로젝트의 팀원 정보를 입력한다.
+    //    for (Member member : project.getMembers()) {
+    //      insertMember(project.getNo(), member.getNo());
+    //    }
+    insertMembers(project.getNo(), project.getMembers());
+
+    return count;
   }
 
   @Override
@@ -49,12 +58,44 @@ public class ProjectDaoImpl implements ProjectDao {
 
   @Override
   public int update(Project project) throws Exception {
-    return sqlSession.update("ProjectMapper.update", project);
+    try {
+
+      // 1) 프로젝트 정보를 변경한다.
+      int count = sqlSession.update("ProjectMapper.update", project);
+
+      // 2) 프로젝트의 기존 멤버를 모두 삭제한다.
+      deleteMembers(project.getNo());
+
+      // 3) 프로젝트 멤버를 추가한다.
+      //    for (Member member : project.getMembers()) {
+      //      insertMember(project.getNo(), member.getNo());
+      //    }
+      insertMembers(project.getNo(), project.getMembers());
+
+      sqlSession.commit();
+      return count;
+    } catch (Exception e) {
+      sqlSession.rollback();
+      throw e;
+    }
+
   }
 
   @Override
   public int delete(int no) throws Exception {
-    return sqlSession.delete("ProjectMapper.delete", no);
+    try {
+
+      // 1) 프로젝트에 소속된 팀원 정보 삭제
+      deleteMembers(no);
+
+      // 2) 프로젝트 삭제
+      int count = sqlSession.delete("ProjectMapper.delete", no);
+      sqlSession.commit();
+      return count;
+    } catch (Exception e) {
+      sqlSession.rollback();
+      throw e;
+    }
   }
 
   @Override

@@ -1,15 +1,15 @@
 package com.eomcs.pms.handler;
 
+import com.eomcs.pms.dao.TaskDao;
 import com.eomcs.pms.domain.Task;
-import com.eomcs.pms.service.TaskService;
 import com.eomcs.util.Prompt;
 
 public class TaskDetailHandler implements Command {
 
-  TaskService taskService;
+  TaskDao taskDao;
 
-  public TaskDetailHandler(TaskService taskService) {
-    this.taskService = taskService;
+  public TaskDetailHandler(TaskDao taskdao) {
+    this.taskDao = taskdao;
   }
 
   @Override
@@ -18,7 +18,7 @@ public class TaskDetailHandler implements Command {
 
     int no = Prompt.inputInt("번호? ");
 
-    Task task = taskService.detail(no);
+    Task task = taskDao.findByNo(no);
 
     if (task == null) {
       System.out.println("해당 번호의 작업이 없습니다.");

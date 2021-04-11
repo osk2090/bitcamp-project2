@@ -1,8 +1,7 @@
 package com.eomcs.pms.dao;
 
-import com.eomcs.pms.domain.Task;
-
 import java.util.List;
+import com.eomcs.pms.domain.Task;
 
 public interface TaskDao {
 

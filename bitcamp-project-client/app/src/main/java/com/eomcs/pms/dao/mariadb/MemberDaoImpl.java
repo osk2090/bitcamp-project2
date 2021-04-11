@@ -1,16 +1,15 @@
 package com.eomcs.pms.dao.mariadb;
 
+import java.util.List;
+import org.apache.ibatis.session.SqlSession;
 import com.eomcs.pms.dao.MemberDao;
 import com.eomcs.pms.domain.Member;
-import org.apache.ibatis.session.SqlSession;
-
-import java.util.List;
 
 public class MemberDaoImpl implements MemberDao {
 
   SqlSession sqlSession;
 
-  public MemberDaoImpl(SqlSession sqlSession) {
+  public MemberDaoImpl(SqlSession sqlSession) throws Exception {
     this.sqlSession = sqlSession;
   }
 
@@ -22,15 +21,6 @@ public class MemberDaoImpl implements MemberDao {
   @Override
   public List<Member> findAll() throws Exception {
     return sqlSession.selectList("MemberMapper.findAll");
-  }
-
-  @Override
-  public Member findByName(String name) throws Exception {
-    List<Member> members = sqlSession.selectList("MemberMapper.findByName", name);
-    if (members.size() == 0) {
-      return null;
-    }
-    return members.get(0);
   }
 
   @Override
@@ -47,4 +37,25 @@ public class MemberDaoImpl implements MemberDao {
   public int delete(int no) throws Exception {
     return sqlSession.delete("MemberMapper.delete", no);
   }
+
+  @Override
+  public Member findByName(String name) throws Exception {
+    List<Member> members = sqlSession.selectList("MemberMapper.findByName", name);
+    if (members.size() == 0) {
+      return null;
+    }
+    return members.get(0);
+  }
 }
+
+
+
+
+
+
+
+
+
+
+
+
