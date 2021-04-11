@@ -1,9 +1,10 @@
 package com.eomcs.pms.dao.mariadb;
 
-import java.util.List;
-import org.apache.ibatis.session.SqlSession;
 import com.eomcs.pms.dao.MemberDao;
 import com.eomcs.pms.domain.Member;
+import org.apache.ibatis.session.SqlSession;
+
+import java.util.List;
 
 public class MemberDaoImpl implements MemberDao {
 
@@ -15,7 +16,9 @@ public class MemberDaoImpl implements MemberDao {
 
   @Override
   public int insert(Member member) throws Exception {
-    return sqlSession.insert("MemberMapper.insert", member);
+    int count = sqlSession.insert("MemberMapper.insert", member);
+    sqlSession.commit();
+    return count;
   }
 
   @Override
@@ -30,12 +33,16 @@ public class MemberDaoImpl implements MemberDao {
 
   @Override
   public int update(Member member) throws Exception {
-    return sqlSession.update("MemberMapper.update", member);
+    int count = sqlSession.update("MemberMapper.update", member);
+    sqlSession.commit();
+    return count;
   }
 
   @Override
   public int delete(int no) throws Exception {
-    return sqlSession.delete("MemberMapper.delete", no);
+    int count = sqlSession.delete("MemberMapper.delete", no);
+    sqlSession.commit();
+    return count;
   }
 
   @Override
