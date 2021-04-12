@@ -21,12 +21,11 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
 import java.io.InputStream;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Parameter;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.util.ArrayDeque;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.*;
 
 public class ClientApp {
 
@@ -36,6 +35,10 @@ public class ClientApp {
 
   String serverAddress;
   int port;
+
+  //객체를 보관할 컨테이너 준비
+  Map<String, Object> objMap = new HashMap<>();
+
 
   public static void main(String[] args) {
     ClientApp app = new ClientApp("localhost", 8888);
@@ -74,7 +77,7 @@ public class ClientApp {
     //DAO 구현체를 만들어주는 공장 객체를 준비한다
     MybatisDaoFactory daoFactory = new MybatisDaoFactory(sqlSession);
 
-    // 핸들러가 사용할 DAO 객체 준비
+    // 서비스 객체가 사용할 DAO 객체 준비
     BoardDao boardDao = daoFactory.createDao(BoardDao.class);
     MemberDao memberDao = daoFactory.createDao(MemberDao.class);
     ProjectDao projectDao = daoFactory.createDao(ProjectDao.class);
@@ -85,39 +88,16 @@ public class ClientApp {
     ProjectService projectService = new DefaultProjectService(sqlSession, projectDao, taskDao);
     TaskService taskService = new DefaultTaskService(sqlSession, taskDao);
 
-    // 사용자 명령을 처리하는 객체를 맵에 보관한다.
-    HashMap<String,Command> commandMap = new HashMap<>();
-
-    commandMap.put("/board/add", new BoardAddHandler(boardService));
-    commandMap.put("/board/list", new BoardListHandler(boardService));
-    commandMap.put("/board/detail", new BoardDetailHandler(boardService));
-    commandMap.put("/board/update", new BoardUpdateHandler(boardService));
-    commandMap.put("/board/delete", new BoardDeleteHandler(boardService));
-    commandMap.put("/board/search", new BoardSearchHandler(boardService));
-
-    commandMap.put("/member/add", new MemberAddHandler(memberService));
-    commandMap.put("/member/list", new MemberListHandler(memberService));
-    commandMap.put("/member/detail", new MemberDetailHandler(memberService));
-    commandMap.put("/member/update", new MemberUpdateHandler(memberService));
-    commandMap.put("/member/delete", new MemberDeleteHandler(memberService));
-
     MemberValidator memberValidator = new MemberValidator(memberService);
 
-    commandMap.put("/project/add", new ProjectAddHandler(projectService, memberValidator));
-    commandMap.put("/project/list", new ProjectListHandler(projectService));
-    commandMap.put("/project/detail", new ProjectDetailHandler(projectService));
-    commandMap.put("/project/update", new ProjectUpdateHandler(projectService, memberValidator));
-    commandMap.put("/project/memberUpdate", new ProjectMemberUpdateHandler(projectService, memberValidator));
-    commandMap.put("/project/memberDelete", new ProjectMemberDeleteHandler(projectService));
-    commandMap.put("/project/delete", new ProjectDeleteHandler(projectService));
-    commandMap.put("/project/search", new ProjectSearchHandler(projectService));
-    commandMap.put("/project/detailSearch", new ProjectDetailSearchHandler(projectService));
+    // Command 구현체가 사용할 의존 객체를 준비하여 보관해 둔다.
+    objMap.put("boardService", boardService);
+    objMap.put("memberService", memberService);
+    objMap.put("projectService", projectService);
+    objMap.put("taskService", taskService);
+    objMap.put("memberValidator", memberValidator);
 
-    commandMap.put("/task/add", new TaskAddHandler(taskService, projectService, memberValidator));
-    commandMap.put("/task/list", new TaskListHandler(taskService));
-    commandMap.put("/task/detail", new TaskDetailHandler(taskService));
-    commandMap.put("/task/update", new TaskUpdateHandler(taskService, projectService, memberValidator));
-    commandMap.put("/task/delete", new TaskDeleteHandler(taskService));
+    registerCommands();
 
     try {
 
@@ -146,7 +126,7 @@ public class ClientApp {
               System.out.println("안녕!");
               return;
             default:
-              Command commandHandler = commandMap.get(command);
+              Command commandHandler = (Command) objMap.get(command);
 
               if (commandHandler == null) {
                 System.out.println("실행할 수 없는 명령입니다.");
@@ -171,7 +151,66 @@ public class ClientApp {
     Prompt.close();
   }
 
-  private void printCommandHistory(Iterator<String> iterator) {
+  private void registerCommands() throws Exception {
+    Properties commandProps = new Properties();
+    commandProps.load(Resources.getResourceAsStream("com/eomcs/pms/conf/commands.properties"));
+
+    Set<Object> keys = commandProps.keySet();
+    for (Object key : keys) {
+      // commands.properties 파일에서 클래스 이름을 한 개 가져온다.
+      String className = (String) commandProps.get(key);
+
+      // 클래스 이름을 사용하여 .class 파일을 로딩한다.
+      Class<?> clazz = Class.forName(className);
+
+      //클래스 정보를 이용하여 객체를 생성한다
+      Object command = createCommand(clazz);
+
+      //생성된 객체를 객체 맴에 보관한다
+      objMap.put((String) key, command);
+
+      //Command 구현체를 맵에 보관한다
+      objMap.put((String) key, command);
+
+      System.out.println("인스턴스 생성===>" + command.getClass().getName());
+    }
+  }
+
+  private Object createCommand(Class<?> clazz) throws Exception {
+    // 생성자 정보를 알아낸다. 첫 번째 생성자만 꺼낸다.
+    Constructor<?> constructor = clazz.getConstructors()[0];
+
+    // 생성자의 파라미터 정보를 알아낸다.
+    Parameter[] params = constructor.getParameters();
+
+    //생성자를 호출할 때 넘겨 줄 값을 담을 컬렉션을 준비한다
+    ArrayList<Object> args = new ArrayList<>();
+
+    //각 파라미터의 타입을 알아낸 후 ObjMap에서 찾는다
+    for (Parameter p : params) {
+      Class<?> paramsType = p.getType();
+      args.add(findDependencyInMap(paramsType));
+    }
+
+    //생성자를 호출하여 인스턴스를 생성한다
+    return constructor.newInstance(args.toArray());
+  }
+
+  private Object findDependencyInMap(Class<?> type) {
+    //맴체서 값 목록을 꺼낸다
+    Collection<?> values = objMap.values();
+    for (Object obj : values) {
+      if (type.isInstance(obj)) {
+        return obj;
+      }
+    }
+    return null;
+  }
+
+  private void printCommandHistory(Iterator<String> iterator)throws Exception {
+    Properties commandProps = new Properties();
+    commandProps.load(Resources.getResourceAsStream(
+            "com/eomcs/pms/conf/commands.properties"));
     int count = 0;
     while (iterator.hasNext()) {
       System.out.println(iterator.next());
