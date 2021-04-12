@@ -1,22 +1,22 @@
 package com.eomcs.pms.handler;
 
-import com.eomcs.pms.dao.ProjectDao;
-import com.eomcs.pms.dao.TaskDao;
 import com.eomcs.pms.domain.Project;
 import com.eomcs.pms.domain.Task;
+import com.eomcs.pms.service.ProjectService;
+import com.eomcs.pms.service.TaskService;
 import com.eomcs.util.Prompt;
 
 import java.util.List;
 
 public class TaskAddHandler implements Command {
 
-  TaskDao taskDao;
-  ProjectDao projectDao;
+  TaskService taskService;
+  ProjectService projectService;
   MemberValidator memberValidator;
 
-  public TaskAddHandler(TaskDao taskDao, ProjectDao projectDao, MemberValidator memberValidator) {
-    this.taskDao = taskDao;
-    this.projectDao = projectDao;
+  public TaskAddHandler(TaskService taskService, ProjectService projectService, MemberValidator memberValidator) {
+    this.taskService = taskService;
+    this.projectService = projectService;
     this.memberValidator = memberValidator;
   }
 
@@ -25,7 +25,7 @@ public class TaskAddHandler implements Command {
     System.out.println("[작업 등록]");
 
     // 1) 현재 등록된 프로젝트 목록을 가져온다.
-    List<Project> projects = projectDao.findByKeyword(null, null);
+    List<Project> projects = projectService.list();
 
 
     // 2) 프로젝트 목록을 출력한다.
@@ -73,8 +73,9 @@ public class TaskAddHandler implements Command {
       return;
     }
 
-    taskDao.insert(t);
+    taskService.add(t);
 
     System.out.println("작업을 등록했습니다.");
   }
 }
+
