@@ -2,9 +2,11 @@ package com.eomcs.pms.handler;
 
 import com.eomcs.pms.domain.Board;
 import com.eomcs.pms.service.BoardService;
+import com.eomcs.stereotype.Component;
 
 import java.util.List;
 
+@Component(value = "/board/list")
 public class BoardListHandler implements Command {
 
   BoardService boardService;

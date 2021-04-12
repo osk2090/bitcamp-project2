@@ -90,7 +90,7 @@ public class ClientApp {
 
     MemberValidator memberValidator = new MemberValidator(memberService);
 
-    // Command 구현체가 사용할 의존 객체를 준비하여 보관해 둔다.
+    // Command 구현체가 사용할 의존 객체를 보관
     objMap.put("boardService", boardService);
     objMap.put("memberService", memberService);
     objMap.put("projectService", projectService);

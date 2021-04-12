@@ -2,10 +2,12 @@ package com.eomcs.pms.handler;
 
 import com.eomcs.pms.domain.Board;
 import com.eomcs.pms.service.BoardService;
+import com.eomcs.stereotype.Component;
 import com.eomcs.util.Prompt;
 
 import java.text.SimpleDateFormat;
 
+@Component(value = "/board/detail")
 public class BoardDetailHandler implements Command {
 
   SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

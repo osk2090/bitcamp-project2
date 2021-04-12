@@ -2,9 +2,11 @@ package com.eomcs.pms.handler;
 
 import com.eomcs.pms.domain.Member;
 import com.eomcs.pms.service.MemberService;
+import com.eomcs.stereotype.Component;
 
 import java.util.List;
 
+@Component(value = "/member/list")
 public class MemberListHandler implements Command {
 
   // 핸들러가 사용할 DAO : 의존 객체(dependency)

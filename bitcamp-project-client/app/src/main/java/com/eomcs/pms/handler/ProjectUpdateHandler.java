@@ -3,10 +3,12 @@ package com.eomcs.pms.handler;
 import com.eomcs.pms.domain.Member;
 import com.eomcs.pms.domain.Project;
 import com.eomcs.pms.service.ProjectService;
+import com.eomcs.stereotype.Component;
 import com.eomcs.util.Prompt;
 
 import java.util.List;
 
+@Component(value = "/project/update")
 public class ProjectUpdateHandler implements Command {
 
   ProjectService projectService;

@@ -3,9 +3,11 @@ package com.eomcs.pms.handler;
 import com.eomcs.pms.domain.Member;
 import com.eomcs.pms.domain.Project;
 import com.eomcs.pms.service.ProjectService;
+import com.eomcs.stereotype.Component;
 
 import java.util.List;
 
+@Component(value = "/project/list")
 public class ProjectListHandler implements Command {
 
   ProjectService projectService;

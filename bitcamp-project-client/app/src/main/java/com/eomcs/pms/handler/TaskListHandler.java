@@ -2,10 +2,12 @@ package com.eomcs.pms.handler;
 
 import com.eomcs.pms.domain.Task;
 import com.eomcs.pms.service.TaskService;
+import com.eomcs.stereotype.Component;
 import com.eomcs.util.Prompt;
 
 import java.util.List;
 
+@Component(value = "/task/list")
 public class TaskListHandler implements Command {
 
   TaskService taskService;

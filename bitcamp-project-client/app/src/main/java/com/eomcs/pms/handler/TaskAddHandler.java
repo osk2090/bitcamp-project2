@@ -4,10 +4,12 @@ import com.eomcs.pms.domain.Project;
 import com.eomcs.pms.domain.Task;
 import com.eomcs.pms.service.ProjectService;
 import com.eomcs.pms.service.TaskService;
+import com.eomcs.stereotype.Component;
 import com.eomcs.util.Prompt;
 
 import java.util.List;
 
+@Component(value = "/task/add")
 public class TaskAddHandler implements Command {
 
   TaskService taskService;
