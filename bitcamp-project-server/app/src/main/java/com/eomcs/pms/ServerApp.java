@@ -179,17 +179,9 @@ public class ServerApp {
       // 클라이언트로부터 값을 입력 받을 때 사용할 객체를 준비한다.
       Prompt prompt = new Prompt(in, out);
 
+      //HTTP(HyperText Transfer Protocol)에 따라 클라이언트 요청 정보를 읽는다
       // 클라이언트가 보낸 요청을 읽는다.
       String requestLine = in.readLine();
-
-      // 클라이언트를 구분할 때 사용할 세션 아이디
-      String sessionId = null;
-
-      // 클라이언트가 사용할 저장소
-      Session session = null;
-
-      // 새션 객체를 새로 만들었는지 여부 
-      boolean isNewSession = false;
 
       // 클라이언트가 보낸 요청 헤더를 읽는다.
       while (true) {
@@ -197,48 +189,25 @@ public class ServerApp {
         if (line.length() == 0) {
           break;
         }
-        // 만약 읽은 헤더가 sessionid 라면,
-        if (line.startsWith("SESSION_ID:")) {
-          sessionId = line.substring(11);
-
-          // 세션 아이디에 해당하는 세션 객체를 찾는다.
-          session = sessionMap.get(sessionId);
-        }
       }
 
-      // 클라이언트가 세션 아이디를 보내오지 않았거나,
-      // 보내오긴 했지만 무효한 세션 아이디일 경우
-      // 새로 세션 객체를 만든다.
-      if (session == null) {
-        session = new Session();
-        sessionId = UUID.randomUUID().toString();
-        isNewSession = true;
-        // 세션 객체를 새로 만들었으면, 
-        // 다음에 같은 클라이언트가 또 사용할 수 있도록 세션 보관소에 저장해 둔다.
-        sessionMap.put(sessionId, session);
-      }
-
-      if (requestLine.equalsIgnoreCase("serverstop")) {
-        out.println("Server stopped!");
-        out.println();
-        out.flush();
-        terminate();
-        return; 
-      }
+      //HTTP 프로토콜의 request-Line에서 Command Path를 추출한다
+      //request-Line의 예)
+      // GET /board/list HTTP/1.1 (CRLF)
+      //
+      String commandPath = requestLine.split(" ")[1];//공백으로 자른다
 
       // 클라이언트의 요청을 처리할 Command 구현체를 찾는다.
-      Command command = (Command) objMap.get(requestLine);
+      Command command = (Command) objMap.get(commandPath);
       if (command == null) {
-        out.println("해당 명령을 처리할 수 없습니다!");
-        out.println();
-        out.flush();
+        sendRepsonseMessage(out, "404 Not Fonund", "요청 명령을 처리할 수 없습니다!");
         return;
       }
 
       CommandRequest request = new CommandRequest(
-          requestLine, 
+          requestLine,
           remoteAddr.getHostString(),
-          remoteAddr.getPort(), 
+          remoteAddr.getPort(),
           prompt,
           session);
 
@@ -258,7 +227,7 @@ public class ServerApp {
         filterList.add(filter);
       }
 
-      // 클라이언트가 요청한 작업을 처리한 후 응답 데이터를 보내기 전에 
+      // 클라이언트가 요청한 작업을 처리한 후 응답 데이터를 보내기 전에
       // 먼저 클라이언트에게 응답 헤더를 보낸다.
       out.println("OK");
       if (isNewSession) {
@@ -299,6 +268,25 @@ public class ServerApp {
     try (Socket socket = new Socket("localhost", 8888)) {
       // 서버를 종료시키기 위해 임의로 접속하는 것이기 때문에 특별히 추가로 해야 할 일이 없다.
     } catch (Exception e) {}
+  }
+
+  private void sendRepsonseMessage(PrintWriter out, String status, String message) throws Exception {
+    //HTTP 응답 프로토콜에 따라 웹 브라우저에게 데이터를 보낸다
+    //HTTP 응답 프로토콜
+    //     응답 상태 (CRLF)
+    //     응답헤더 (CRLF)
+    //     ...
+    //     CRLF
+    //     메세지
+    //예)
+    //     HTTP/1.1 200 OK (CRLF)
+    //     Content-Type: text/plain;utf-8
+    //     CRLF
+    out.println("HTTP/1.1 " + status);
+    out.println("Content-Type: text/plain;utf-8");
+    out.println();
+    out.println(message);
+    out.flush();
   }
 
   private void registerCommandAndFilter() throws Exception {
