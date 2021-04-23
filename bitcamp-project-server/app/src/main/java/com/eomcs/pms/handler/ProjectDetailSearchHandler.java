@@ -1,5 +1,7 @@
 package com.eomcs.pms.handler;
 
+import java.io.PrintWriter;
+import java.util.List;
 import com.eomcs.pms.domain.Member;
 import com.eomcs.pms.domain.Project;
 import com.eomcs.pms.service.ProjectService;
@@ -7,9 +9,6 @@ import com.eomcs.stereotype.Component;
 import com.eomcs.util.CommandRequest;
 import com.eomcs.util.CommandResponse;
 import com.eomcs.util.Prompt;
-
-import java.io.PrintWriter;
-import java.util.List;
 
 @Component("/project/detailSearch")
 public class ProjectDetailSearchHandler implements Command {
@@ -46,7 +45,7 @@ public class ProjectDetailSearchHandler implements Command {
       }
 
       // 2) 프로젝트 정보를 출력
-      out.printf("%d, %s, %s, %s, %s, [%s]\n",
+      out.printf("%d, %s, %s, %s, %s, [%s]\n", 
           p.getNo(), 
           p.getTitle(), 
           p.getStartDate(),

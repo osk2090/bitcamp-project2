@@ -1,5 +1,6 @@
 package com.eomcs.pms.handler;
 
+import java.io.PrintWriter;
 import com.eomcs.pms.domain.Member;
 import com.eomcs.pms.service.MemberService;
 import com.eomcs.stereotype.Component;
@@ -7,9 +8,7 @@ import com.eomcs.util.CommandRequest;
 import com.eomcs.util.CommandResponse;
 import com.eomcs.util.Prompt;
 
-import java.io.PrintWriter;
-
-@Component(value="/member/add")
+@Component("/member/add")
 public class MemberAddHandler implements Command {
 
   MemberService memberService;
@@ -35,6 +34,7 @@ public class MemberAddHandler implements Command {
     memberService.add(m);
 
     out.println("회원을 등록하였습니다.");
+
   }
 }
 

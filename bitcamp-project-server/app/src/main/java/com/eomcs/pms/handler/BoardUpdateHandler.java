@@ -1,6 +1,7 @@
 package com.eomcs.pms.handler;
 
 import com.eomcs.pms.domain.Board;
+import com.eomcs.pms.domain.Member;
 import com.eomcs.pms.service.BoardService;
 import com.eomcs.stereotype.Component;
 import com.eomcs.util.CommandRequest;
@@ -11,7 +12,6 @@ import java.io.PrintWriter;
 
 @Component("/board/update")
 public class BoardUpdateHandler implements Command {
-
 
   BoardService boardService;
 
@@ -26,11 +26,18 @@ public class BoardUpdateHandler implements Command {
 
     out.println("[게시글 변경]");
 
+
     int no = prompt.inputInt("번호? ");
 
     Board oldBoard = boardService.get(no);
     if (oldBoard == null) {
       out.println("해당 번호의 게시글이 없습니다.");
+      return;
+    }
+
+    Member loginUser = (Member) request.getSession().getAttribute("loginUser");
+    if (oldBoard.getWriter().getNo() != loginUser.getNo()) {
+      out.println("변경 권한이 없습니다!");
       return;
     }
 

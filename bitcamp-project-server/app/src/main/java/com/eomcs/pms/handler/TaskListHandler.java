@@ -1,14 +1,13 @@
 package com.eomcs.pms.handler;
 
+import java.io.PrintWriter;
+import java.util.List;
 import com.eomcs.pms.domain.Task;
 import com.eomcs.pms.service.TaskService;
 import com.eomcs.stereotype.Component;
 import com.eomcs.util.CommandRequest;
 import com.eomcs.util.CommandResponse;
 import com.eomcs.util.Prompt;
-
-import java.io.PrintWriter;
-import java.util.List;
 
 @Component("/task/list")
 public class TaskListHandler implements Command {
@@ -23,6 +22,7 @@ public class TaskListHandler implements Command {
   public void service(CommandRequest request, CommandResponse response) throws Exception {
     PrintWriter out = response.getWriter();
     Prompt prompt = request.getPrompt();
+
     out.println("[작업 목록]");
 
     String input = prompt.inputString("프로젝트 번호?(전체: 빈 문자열 또는 0) ");
@@ -57,7 +57,7 @@ public class TaskListHandler implements Command {
         out.printf("'%s' 작업 목록: \n", t.getProjectTitle());
         projectNo = t.getProjectNo();
       }
-      out.printf("%d, %s, %s, %s, %s\n",
+      out.printf("%d, %s, %s, %s, %s\n", 
           t.getNo(), 
           t.getContent(), 
           t.getDeadline(),

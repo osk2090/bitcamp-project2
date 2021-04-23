@@ -1,5 +1,7 @@
 package com.eomcs.pms.handler;
 
+import java.io.PrintWriter;
+import java.util.List;
 import com.eomcs.pms.domain.Board;
 import com.eomcs.pms.service.BoardService;
 import com.eomcs.stereotype.Component;
@@ -7,10 +9,7 @@ import com.eomcs.util.CommandRequest;
 import com.eomcs.util.CommandResponse;
 import com.eomcs.util.Prompt;
 
-import java.io.PrintWriter;
-import java.util.List;
-
-@Component(value="/board/search")
+@Component("/board/search")
 public class BoardSearchHandler implements Command {
 
   BoardService boardService;
@@ -39,12 +38,12 @@ public class BoardSearchHandler implements Command {
     }
 
     for (Board b : list) {
-      out.printf("%d, %s, %s, %s, %d\n",
-              b.getNo(),
-              b.getTitle(),
-              b.getWriter().getName(),
-              b.getRegisteredDate(),
-              b.getViewCount());
+      out.printf("%d, %s, %s, %s, %d\n", 
+          b.getNo(), 
+          b.getTitle(), 
+          b.getWriter().getName(),
+          b.getRegisteredDate(),
+          b.getViewCount());
     }
   }
 }

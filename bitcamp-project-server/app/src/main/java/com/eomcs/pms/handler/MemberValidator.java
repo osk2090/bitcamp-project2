@@ -1,14 +1,13 @@
 package com.eomcs.pms.handler;
 
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 import com.eomcs.pms.domain.Member;
 import com.eomcs.pms.service.MemberService;
 import com.eomcs.util.CommandRequest;
 import com.eomcs.util.CommandResponse;
 import com.eomcs.util.Prompt;
-
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
 
 public class MemberValidator {
 
@@ -26,7 +25,7 @@ public class MemberValidator {
       String name = prompt.inputString(promptTitle);
       if (name.length() == 0) {
         return null;
-      }
+      } 
 
       Member m = memberService.search(name);
       if (m != null) {

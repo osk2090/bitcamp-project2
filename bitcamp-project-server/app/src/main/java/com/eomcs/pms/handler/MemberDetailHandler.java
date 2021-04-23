@@ -1,5 +1,6 @@
 package com.eomcs.pms.handler;
 
+import java.io.PrintWriter;
 import com.eomcs.pms.domain.Member;
 import com.eomcs.pms.service.MemberService;
 import com.eomcs.stereotype.Component;
@@ -7,9 +8,7 @@ import com.eomcs.util.CommandRequest;
 import com.eomcs.util.CommandResponse;
 import com.eomcs.util.Prompt;
 
-import java.io.PrintWriter;
-
-@Component(value="/member/detail")
+@Component("/member/detail")
 public class MemberDetailHandler implements Command {
 
   MemberService memberService;

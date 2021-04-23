@@ -1,5 +1,7 @@
 package com.eomcs.pms.handler;
 
+import java.io.PrintWriter;
+import java.util.List;
 import com.eomcs.pms.domain.Member;
 import com.eomcs.pms.domain.Project;
 import com.eomcs.pms.service.ProjectService;
@@ -7,9 +9,6 @@ import com.eomcs.stereotype.Component;
 import com.eomcs.util.CommandRequest;
 import com.eomcs.util.CommandResponse;
 import com.eomcs.util.Prompt;
-
-import java.io.PrintWriter;
-import java.util.List;
 
 @Component("/project/search")
 public class ProjectSearchHandler implements Command {
@@ -29,9 +28,9 @@ public class ProjectSearchHandler implements Command {
 
     String item = prompt.inputString("항목(1:프로젝트명, 2:관리자명, 3:팀원, 그 외: 전체)? ");
     String keyword = null;
-    if (item.equals("1") ||
-            item.equals("2") ||
-            item.equals("3")) {
+    if (item.equals("1") || 
+        item.equals("2") || 
+        item.equals("3")) {
       keyword = prompt.inputString("검색어? ");
     }
 
@@ -50,13 +49,13 @@ public class ProjectSearchHandler implements Command {
       }
 
       // 2) 프로젝트 정보를 출력
-      out.printf("%d, %s, %s, %s, %s, [%s]\n",
-              p.getNo(),
-              p.getTitle(),
-              p.getStartDate(),
-              p.getEndDate(),
-              p.getOwner().getName(),
-              strBuilder.toString());
+      out.printf("%d, %s, %s, %s, %s, [%s]\n", 
+          p.getNo(), 
+          p.getTitle(), 
+          p.getStartDate(),
+          p.getEndDate(),
+          p.getOwner().getName(),
+          strBuilder.toString());
     }
   }
 }

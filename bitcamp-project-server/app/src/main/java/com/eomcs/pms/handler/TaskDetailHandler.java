@@ -1,13 +1,12 @@
 package com.eomcs.pms.handler;
 
+import java.io.PrintWriter;
 import com.eomcs.pms.domain.Task;
 import com.eomcs.pms.service.TaskService;
 import com.eomcs.stereotype.Component;
 import com.eomcs.util.CommandRequest;
 import com.eomcs.util.CommandResponse;
 import com.eomcs.util.Prompt;
-
-import java.io.PrintWriter;
 
 @Component("/task/detail")
 public class TaskDetailHandler implements Command {
@@ -22,6 +21,7 @@ public class TaskDetailHandler implements Command {
   public void service(CommandRequest request, CommandResponse response) throws Exception {
     PrintWriter out = response.getWriter();
     Prompt prompt = request.getPrompt();
+
     out.println("[작업 상세보기]");
 
     int no = prompt.inputInt("번호? ");

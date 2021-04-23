@@ -11,7 +11,7 @@ import com.eomcs.util.Prompt;
 import java.io.PrintWriter;
 import java.util.List;
 
-@Component(value="/project/update")
+@Component("/project/update")
 public class ProjectUpdateHandler implements Command {
 
   ProjectService projectService;
@@ -29,6 +29,7 @@ public class ProjectUpdateHandler implements Command {
 
     out.println("[프로젝트 변경]");
 
+
     int no = prompt.inputInt("번호? ");
 
     Project oldProject = projectService.get(no);
@@ -38,24 +39,24 @@ public class ProjectUpdateHandler implements Command {
       return;
     }
 
+    Member loginUser = (Member) request.getSession().getAttribute("loginUser");
+    if (oldProject.getOwner().getNo() != loginUser.getNo()) {
+      out.println("변경 권한이 없습니다!");
+      return;
+    }
+
     // 사용자에게서 변경할 데이터를 입력 받는다.
     Project project = new Project();
     project.setNo(no);
     project.setTitle(prompt.inputString(
-            String.format("프로젝트명(%s)? ", oldProject.getTitle())));
+        String.format("프로젝트명(%s)? ", oldProject.getTitle())));
     project.setContent(prompt.inputString(
-            String.format("내용(%s)? ", oldProject.getContent())));
+        String.format("내용(%s)? ", oldProject.getContent())));
     project.setStartDate(prompt.inputDate(
-            String.format("시작일(%s)? ", oldProject.getStartDate())));
+        String.format("시작일(%s)? ", oldProject.getStartDate())));
     project.setEndDate(prompt.inputDate(
-            String.format("종료일(%s)? ", oldProject.getEndDate())));
-    project.setOwner(memberValidator.inputMember(
-            String.format("만든이(%s)?(취소: 빈 문자열) ", oldProject.getOwner().getName()), request, response));
-
-    if (project.getOwner() == null) {
-      System.out.println("프로젝트 변경을 취소합니다.");
-      return;
-    }
+        String.format("종료일(%s)? ", oldProject.getEndDate())));
+    project.setOwner(loginUser);
 
     // 프로젝트 팀원 정보를 입력 받는다.
     StringBuilder strBuilder = new StringBuilder();
@@ -68,7 +69,7 @@ public class ProjectUpdateHandler implements Command {
     }
 
     project.setMembers(memberValidator.inputMembers(
-            String.format("팀원(%s)?(완료: 빈 문자열) ", strBuilder), request, response));
+        String.format("팀원(%s)?(완료: 빈 문자열) ", strBuilder), request, response));
 
     String input = prompt.inputString("정말 변경하시겠습니까?(y/N) ");
     if (!input.equalsIgnoreCase("Y")) {
@@ -78,7 +79,6 @@ public class ProjectUpdateHandler implements Command {
 
     // DBMS에게 프로젝트 변경을 요청한다.
     projectService.update(project);
-
     out.println("프로젝트을 변경하였습니다.");
   }
 }

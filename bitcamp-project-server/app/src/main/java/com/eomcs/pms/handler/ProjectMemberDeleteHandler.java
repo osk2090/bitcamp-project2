@@ -35,12 +35,18 @@ public class ProjectMemberDeleteHandler implements Command {
       return;
     }
 
+    Member loginUser = (Member) request.getSession().getAttribute("loginUser");
+    if (project.getOwner().getNo() != loginUser.getNo()) {
+      out.println("삭제 권한이 없습니다!");
+      return;
+    }
+
     out.printf("프로젝트 명: %s\n", project.getTitle());
     out.println("멤버:");
     for (Member m : project.getMembers()) {
       out.printf("  %s(%d)\n", m.getName(), m.getNo());
     }
-    out.println();
+    out.println("---------------------------");
 
     String input = prompt.inputString("정말 삭제하시겠습니까?(y/N) ");
     if (!input.equalsIgnoreCase("Y")) {

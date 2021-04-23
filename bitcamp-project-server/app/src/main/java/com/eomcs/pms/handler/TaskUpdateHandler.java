@@ -1,5 +1,7 @@
 package com.eomcs.pms.handler;
 
+import java.io.PrintWriter;
+import java.util.List;
 import com.eomcs.pms.domain.Project;
 import com.eomcs.pms.domain.Task;
 import com.eomcs.pms.service.ProjectService;
@@ -9,10 +11,7 @@ import com.eomcs.util.CommandRequest;
 import com.eomcs.util.CommandResponse;
 import com.eomcs.util.Prompt;
 
-import java.io.PrintWriter;
-import java.util.List;
-
-@Component(value="/task/update")
+@Component("/task/update")
 public class TaskUpdateHandler implements Command {
 
   TaskService taskService;
@@ -30,6 +29,7 @@ public class TaskUpdateHandler implements Command {
   public void service(CommandRequest request, CommandResponse response) throws Exception {
     PrintWriter out = response.getWriter();
     Prompt prompt = request.getPrompt();
+
     out.println("[작업 변경]");
 
     int no = prompt.inputInt("번호? ");
@@ -87,7 +87,7 @@ public class TaskUpdateHandler implements Command {
         "상태(%s)?\n0: 신규\n1: 진행중\n2: 완료\n> ",
         Task.getStatusLabel(oldTask.getStatus()))));
     task.setOwner(memberValidator.inputMember(
-            String.format("담당자(%s)?(취소: 빈 문자열) ", oldTask.getOwner().getName()), request, response));
+        String.format("담당자(%s)?(취소: 빈 문자열) ", oldTask.getOwner().getName()), request, response));
 
     if(task.getOwner() == null) {
       out.println("작업 변경을 취소합니다.");

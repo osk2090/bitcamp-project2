@@ -1,32 +1,45 @@
 package com.eomcs.util;
 
-//
+// 클라이언트의 요청 정보를 다루는 역할
 public class CommandRequest {
-    private String commandPath;
-    private String remoteAddr;
-    private int remotePort;
-    private Prompt prompt;
 
-    public CommandRequest(String commandPath, String remoteAddr, int remotePort, Prompt prompt) {
-        this.prompt = prompt;
-        this.remotePort = remotePort;
-        this.commandPath = commandPath;
-        this.remoteAddr = remoteAddr;
-    }
+  private String commandPath;
+  private String remoteAddr;
+  private int remotePort;
+  private Prompt prompt;
+  private Session session;
 
-    public String getCommandPath() {
-        return commandPath;
-    }
+  public CommandRequest(
+      String commandPath, 
+      String remoteAddr, 
+      int remotePort, 
+      Prompt prompt, 
+      Session session) {
 
-    public String getRemoteAddr() {
-        return remoteAddr;
-    }
+    this.commandPath = commandPath;
+    this.remoteAddr = remoteAddr;
+    this.remotePort = remotePort;
+    this.prompt = prompt;
+    this.session = session;
+  }
 
-    public int getRemotePort() {
-        return remotePort;
-    }
+  public String getCommandPath() {
+    return commandPath;
+  }
 
-    public Prompt getPrompt() {
-        return prompt;
-    }
+  public String getRemoteAddr() {
+    return remoteAddr;
+  }
+
+  public int getRemotePort() {
+    return remotePort;
+  }
+
+  public Prompt getPrompt() {
+    return prompt;
+  }
+
+  public Session getSession() {
+    return session;
+  }
 }
