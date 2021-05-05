@@ -1,6 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="war" name="Tomcat 10.0.5">
-    <output-path>$PROJECT_DIR$/out/artifacts/Tomcat_10_0_5</output-path>
-    <root id="archive" name="Tomcat 10.0.5.war" />
-  </artifact>
-</component>
